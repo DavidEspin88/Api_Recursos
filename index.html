@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Gastos - CRUD</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Estructura de Gastos (Pestaña GASTO)</h2>
+        
+        <div class="form-group">
+            <input type="hidden" id="editIdGasto"> 
+            <input type="text" id="nombreGasto" placeholder="Escribe el NOMBRE_GASTO aquí..." required>
+            <button id="btnGuardar" class="btn-add">Crear Campo</button>
+        </div>
+
+        <h3>Campos Registrados</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">ID_GASTO</th>
+                        <th style="width: 50%;">NOMBRE_GASTO</th>
+                        <th style="width: 20%; text-align: center;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaGastos">
+                    <tr>
+                        <td colspan="3" style="text-align:center;">Cargando datos desde la base de datos...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Estructura de Detalles (Pestaña DETALLE_GASTO)</h2>
+        
+        <div class="form-group">
+            <input type="hidden" id="editIdDetalleGasto"> 
+            <input type="text" id="nombreGastoDetalle" placeholder="Escribe el NOMBRE_GASTO para detalle aquí..." required>
+            <button id="btnGuardarDetalle" class="btn-add" style="background-color: #1abc9c;">Crear Detalle</button>
+        </div>
+
+        <h3>Detalles Registrados</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">ID_DETALLE_GASTO</th>
+                        <th style="width: 50%;">DETALLE_GASTO</th>
+                        <th style="width: 20%; text-align: center;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaDetalles">
+                    <tr>
+                        <td colspan="3" style="text-align:center;">Cargando detalles...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<div class="container" style="max-width: 95%; margin-top: 30px;">
+        <h2>Matriz de Control Operacional de Gastos (Dinámica)</h2>
+        <p style="font-size: 13px; color: #666; font-style: italic;">Esta tabla genera sus columnas automáticamente usando los nombres creados en la sección superior.</p>
+        
+        <div class="table-container">
+            <table style="width: 100%;">
+                <thead id="encabezadoMatriz">
+                    </thead>
+                <tbody id="cuerpoMatriz">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+    <script href="script.js" src="script.js"></script>
+    <script src="detalle.js"></script>
+</body>
+</html>

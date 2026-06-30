@@ -1,0 +1,140 @@
+/* Estilos Generales y Reset */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 30px;
+    background-color: #f4f6f9;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    border-bottom: 2px solid #edf2f7;
+    padding-bottom: 10px;
+}
+
+h3 {
+    color: #4a5568;
+    margin-top: 30px;
+}
+
+/* Formulario e Inputs alineados */
+.form-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+}
+
+/* Botones y Acciones */
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+.btn-add {
+    background-color: #2f855a;
+    color: white;
+}
+
+.btn-add:hover {
+    background-color: #22543d;
+}
+
+.btn-edit-mode {
+    background-color: #dd6b20;
+    color: white;
+}
+
+.btn-edit-mode:hover {
+    background-color: #9c4221;
+}
+
+.btn-action-edit {
+    background-color: #ecc94b;
+    color: #744210;
+    padding: 6px 12px;
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+.btn-action-edit:hover {
+    background-color: #d69e2e;
+}
+
+.btn-action-delete {
+    background-color: #e53e3e;
+    color: white;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.btn-action-delete:hover {
+    background-color: #9b2c2c;
+}
+
+/* Estructura de la Tabla */
+.table-container {
+    margin-top: 15px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+th, td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+}
+
+th {
+    background-color: #f7fafc;
+    color: #4a5568;
+    font-weight: 700;
+}
+
+tr:hover {
+    background-color: #f8fafc;
+}
+
+td strong {
+    color: #4a5568;
+}
