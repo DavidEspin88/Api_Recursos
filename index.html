@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container visual-hidden">
         <h2>1. Estructura de Tipos de Gasto</h2>
         <div class="form-group">
             <input type="hidden" id="editIdGasto"> 
@@ -21,34 +21,34 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 30%;">ID_GASTO</th>
-                        <th style="width: 50%;">NOMBRE_GASTO</th>
-                        <th style="width: 20%; text-align: center;">Acciones</th>
+                        <th class="w-30">ID_GASTO</th>
+                        <th class="w-50">NOMBRE_GASTO</th>
+                        <th class="w-20 text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="tablaGastos">
-                    <tr><td colspan="3" style="text-align:center;">Cargando base de datos...</td></tr>
+                    <tr><td colspan="3" class="text-center">Cargando base de datos...</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div class="container">
+    <div class="container visual-hidden">
         <h2>2. Administrador Unificado de Categorías</h2>
-        <div style="background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
+        <div class="card-panel">
             <input type="hidden" id="editIdDetalleGasto"> 
             
-            <div style="display: flex; gap: 12px; margin-bottom: 10px; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 200px; display: flex; flex-direction: column;">
-                    <label style="font-size: 12px; font-weight: bold; margin-bottom: 4px;">Vincular a Tipo de Gasto:</label>
-                    <select id="selectTipoGastoDetalle" style="padding: 11px; border-radius: 6px; border: 1px solid #cbd5e0; background: white; font-size: 14px;"></select>
+            <div class="form-grid-2">
+                <div class="input-wrapper flex-1">
+                    <label class="input-label">Vincular a Tipo de Gasto:</label>
+                    <select id="selectTipoGastoDetalle" class="custom-select"></select>
                 </div>
-                <div style="flex: 1; min-width: 250px; display: flex; flex-direction: column;">
-                    <label style="font-size: 12px; font-weight: bold; margin-bottom: 4px;">Nombre de la Categoría:</label>
-                    <input type="text" id="nombreGastoDetalle" placeholder="Ej: Arriendo, Internet, Gasolina..." required style="margin-top: 0;">
+                <div class="input-wrapper flex-2">
+                    <label class="input-label">Nombre de la Categoría:</label>
+                    <input type="text" id="nombreGastoDetalle" placeholder="Ej: Arriendo, Internet, Gasolina..." required>
                 </div>
             </div>
-            <button id="btnGuardarDetalle" class="btn-add" style="background-color: #1abc9c; width: 100%;">Crear Categoría</button>
+            <button id="btnGuardarDetalle" class="btn-add btn-w-full">Crear Categoría</button>
         </div>
 
         <h3>Catálogo de Categorías</h3>
@@ -60,141 +60,142 @@
                         <th>TIPO GASTO</th>
                         <th>CATEGORÍA (DETALLE)</th>
                         <th>ESTADO</th>
-                        <th style="text-align: center;">Acciones</th>
+                        <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="tablaDetalles">
-                    <tr><td colspan="5" style="text-align:center;">Cargando catálogo...</td></tr>
+                    <tr><td colspan="5" class="text-center">Cargando catálogo...</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div class="container" style="max-width: 95%; margin-top: 30px;">
-<div class="container" style="background: #e6fffa; border: 2px solid #319795; margin-bottom: 25px;">
+    <div class="container container-income">
         <h2>💰 Gestión de Ingresos Mensuales</h2>
         
-        <div style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; background: #ffffff; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e0;">
-            <label style="font-weight: bold; font-size: 14px; color: #234e52;">Seleccionar Mes de Consulta:</label>
-            <input type="month" id="filtroMesAnioIngreso" value="2026-06" style="padding: 8px; border-radius: 6px; border: 1px solid #cbd5e0;">
+        <div class="filter-bar">
+            <label class="filter-label">📅 Periodo Contable :</label>
+            <input type="month" id="filtroMesAnioIngreso" value="2026-01" class="input-month">
         </div>
 
-        <div style="background: #ffffff; padding: 15px; border-radius: 6px; border: 1px solid #cbd5e0; margin-bottom: 15px;">
-            <h4 style="margin-top: 0; color: #234e52;">Registrar Nuevo Ingreso</h4>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px;">
-                <div style="display:flex; flex-direction:column;">
-                    <label style="font-size:12px; font-weight:bold; color:#4a5568; margin-bottom:4px;">Fecha</label>
-                    <input type="date" id="fechaIngreso" style="padding:10px; border-radius:6px; border:1px solid #cbd5e0;">
+        <div class="card-panel white-bg">
+            <h4 class="card-title-income">Registrar Nuevo Ingreso</h4>
+            <div class="form-grid-auto">
+                <div class="flex-column">
+                    <label class="input-label label-dark">Fecha</label>
+                    <input type="date" id="fechaIngreso" class="custom-input-date">
                 </div>
                 
-                <div style="display:flex; flex-direction:column; position: relative;">
-                    <label style="font-size:12px; font-weight:bold; color:#4a5568; margin-bottom:4px;">Nombre / Fuente</label>
-                    <div style="display: flex; gap: 4px; align-items: center;">
-                        <select id="nombreIngreso" style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e0; background: white;">
+                <div class="flex-column pos-relative">
+                    <label class="input-label label-dark">Nombre / Fuente</label>
+                    <div class="flex-row gap-4 align-center">
+                        <select id="nombreIngreso" class="custom-select flex-1">
                             <option value="">-- Seleccione Fuente --</option>
                         </select>
-                        <button id="btnIngRapidoAdd" type="button" title="Crear Fuente" style="padding: 8px 10px; background: #2f855a; color: white; font-weight: bold; border-radius: 4px;">+</button>
-                        <button id="btnIngRapidoEdit" type="button" title="Editar Fuente" style="display:none; padding: 8px 10px; background: #dd6b20; color: white; border-radius: 4px;">✏️</button>
-                        <button id="btnIngRapidoDelete" type="button" title="Eliminar Fuente" style="display:none; padding: 8px 10px; background: #e53e3e; color: white; border-radius: 4px;">🗑️</button>
+                        <button id="btnIngRapidoAdd" type="button" title="Crear Fuente" class="btn-icon-add">+</button>
+                        <button id="btnIngRapidoEdit" type="button" title="Editar Fuente" class="btn-icon-edit">✏️</button>
+                        <button id="btnIngRapidoDelete" type="button" title="Eliminar Fuente" class="btn-icon-delete">🗑️</button>
                     </div>
                     
-                    <div id="subFormFuenteRapida" style="display: none; margin-top: 8px; background: #edf2f7; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e0; z-index: 10;">
+                    <div id="subFormFuenteRapida" class="sub-form-popup">
                         <input type="hidden" id="rapidoIdFuente">
-                        <input type="text" id="rapidoInputFuente" placeholder="Ej: David, Nómina, Rentas..." style="width: 100%; box-sizing: border-box; padding: 8px; margin-bottom: 6px; font-size: 13px; border: 1px solid #cbd5e0; border-radius: 4px;">
-                        <div style="display: flex; gap: 6px; justify-content: flex-end;">
-                            <button id="btnFuenteCancelar" type="button" style="padding: 4px 8px; background: #718096; color: white; font-size: 11px; border-radius:4px;">Cancelar</button>
-                            <button id="btnFuenteGuardar" type="button" style="padding: 4px 12px; background: #3182ce; color: white; font-size: 11px; border-radius:4px;">Guardar</button>
+                        <input type="text" id="rapidoInputFuente" placeholder="Ej: David, Nómina, Rentas..." class="sub-form-input">
+                        <div class="flex-row gap-6 justify-end">
+                            <button id="btnFuenteCancelar" type="button" class="btn-sub-cancel">Cancelar</button>
+                            <button id="btnFuenteGuardar" type="button" class="btn-sub-save">Guardar</button>
                         </div>
                     </div>
                 </div>
 
-                <div style="display:flex; flex-direction:column;">
-                    <label style="font-size:12px; font-weight:bold; color:#4a5568; margin-bottom:4px;">Monto ($)</label>
-                    <input type="number" step="0.01" id="montoIngreso" placeholder="0.00" style="padding:10px; border-radius:6px; border:1px solid #cbd5e0;">
+                <div class="flex-column">
+                    <label class="input-label label-dark">Monto ($)</label>
+                    <input type="number" step="0.01" id="montoIngreso" placeholder="0.00" class="custom-input-number">
                 </div>
             </div>
-            <button id="btnRegistrarIngreso" class="btn-add" style="background-color: #234e52; width: 100%;">Agregar Ingreso</button>
+            <button id="btnRegistrarIngreso" class="btn-add btn-income-submit">Agregar Ingreso</button>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; margin-bottom: 15px;">
-            <div style="background: #ffffff; padding: 12px; border-radius: 6px; border: 1px solid #cbd5e0;">
-                <span style="font-size: 13px; font-weight: bold; color: #4a5568; display: block;">Total Ingresos:</span>
-                <span id="totalMontoIngresos" style="color: #234e52; font-size: 24px; font-weight: 800;">$0.00</span>
+        <div class="form-grid-2 gap-15 m-t-15 m-b-15">
+            <div class="summary-card">
+                <span class="summary-title">Total Ingresos:</span>
+                <span id="totalMontoIngresos" class="summary-value color-income">$0.00</span>
             </div>
-            <div style="background: #ffffff; padding: 12px; border-radius: 6px; border: 1px solid #cbd5e0;">
-                <span style="font-size: 13px; font-weight: bold; color: #4a5568; display: block;">Saldo del Mes (Ingresos - Gastos):</span>
-                <span id="balanceNetoMensual" style="color: #2b6cb0; font-size: 24px; font-weight: 800;">$0.00</span>
+            <div class="summary-card">
+                <span class="summary-title">Saldo del Mes (Ingresos - Gastos):</span>
+                <span id="balanceNetoMensual" class="summary-value color-balance">$0.00</span>
             </div>
         </div>
 
         <div class="table-container">
             <table>
                 <thead>
-                    <tr style="background-color: #e6fffa;">
+                    <tr class="th-income-bg">
                         <th>ID_INGRESO</th>
                         <th>FECHA</th>
                         <th>NOMBRE / FUENTE</th>
-                        <th style="text-align: right;">MONTO</th>
-                        <th style="text-align: center;">ACCIÓN</th>
+                        <th class="text-right">MONTO</th>
+                        <th class="text-center">ACCIÓN</th>
                     </tr>
                 </thead>
                 <tbody id="tablaIngresosCuerpo">
-                    <tr><td colspan="5" style="text-align:center;">Cargando ingresos...</td></tr>
+                    <tr><td colspan="5" class="text-center">Cargando ingresos...</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <div class="container max-w-95 m-t-30">
         <h2>3. Transacciones y Registro de Gastos</h2>
         
-        <div style="background: #f8fafc; padding: 20px; border-radius: 6px; border: 1px dashed #cbd5e0; margin-bottom: 25px;">
-            <h4 style="margin-top: 0; color: #2c3e50;">Nuevo Registro Transaccional</h4>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
-                <div style="display:flex; flex-direction:column;">
-                    <label style="font-size:12px; font-weight:bold; color:#4a5568; margin-bottom:4px;">Fecha</label>
-                    <input type="date" id="fechaRegistro" style="padding:10px; border-radius:6px; border:1px solid #cbd5e0;">
+        <div class="card-panel-dashed">
+            <h4 class="card-title-standard">Nuevo Registro Transaccional</h4>
+            <div class="form-grid-auto gap-15 m-b-15">
+                <div class="flex-column">
+                    <label class="input-label label-dark">Fecha</label>
+                    <input type="date" id="fechaRegistro" class="custom-input-date">
                 </div>
-                <div style="display:flex; flex-direction:column;">
-                    <label style="font-size:12px; font-weight:bold; color:#4a5568; margin-bottom:4px;">Tipo de Gasto</label>
-                    <select id="tipoGastoRegistro" style="padding:10px; border-radius:6px; border:1px solid #cbd5e0; background:white;">
+                <div class="flex-column">
+                    <label class="input-label label-dark">Tipo de Gasto</label>
+                    <select id="tipoGastoRegistro" class="custom-select">
                         <option value="">-- Seleccione --</option>
                     </select>
                 </div>
-<div id="contenedorDetalleRegistro" style="display:flex; flex-direction:column; position: relative;">
-    <label style="font-size:12px; font-weight:bold; color:#4a5568; margin-bottom:4px;">Categoría (Detalle)</label>
-    
-    <input type="text" id="buscarDetalleTransaccion" placeholder=" Buscar categoría..." style="padding: 6px; border-radius: 4px; border: 1px solid #cbd5e0; margin-bottom: 4px; font-size: 12px; display:none;">
-    
-    <div style="display: flex; gap: 6px; align-items: center;">
-        <select id="detalleRegistro" disabled style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e0; background:#edf2f7;">
-            <option value="">-- Seleccione Tipo primero --</option>
-        </select>
-        
-        <button id="btnRapidoAdd" type="button" title="Crear nueva categoría" style="display:none; padding: 10px 12px; background: #2f855a; color: white; font-size: 16px;">+</button>
-        <button id="btnRapidoEdit" type="button" title="Editar categoría seleccionada" style="display:none; padding: 10px 12px; background: #dd6b20; color: white; font-size: 14px;">✏️</button>
-        <button id="btnRapidoDelete" type="button" title="Eliminar categoría seleccionada" style="display:none; padding: 10px 12px; background: #e53e3e; color: white; font-size: 14px;">🗑️</button>
-    </div>
+                <div id="contenedorDetalleRegistro" class="flex-column pos-relative">
+                    <label class="input-label label-dark">Categoría (Detalle)</label>
+                    
+                    <input type="text" id="buscarDetalleTransaccion" placeholder=" Buscar categoría..." class="search-input-hidden">
+                    
+                    <div class="flex-row gap-6 align-center">
+                        <select id="detalleRegistro" disabled class="custom-select bg-disabled">
+                            <option value="">-- Seleccione Tipo primero --</option>
+                        </select>
+                        
+                        <button id="btnRapidoAdd" type="button" title="Crear nueva categoría" class="btn-action-quick btn-quick-green">+</button>
+                        <button id="btnRapidoEdit" type="button" title="Editar categoría seleccionada" class="btn-action-quick btn-quick-orange">✏️</button>
+                        <button id="btnRapidoDelete" type="button" title="Eliminar categoría seleccionada" class="btn-action-quick btn-quick-red">🗑️</button>
+                    </div>
 
-    <div id="subFormCategoriaRapida" style="display: none; margin-top: 8px; background: #edf2f7; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e0;">
-        <input type="hidden" id="rapidoIdDetalle">
-        <input type="text" id="rapidoInputNombre" placeholder="Nombre de la nueva categoría..." style="width: 100%; box-sizing: border-box; padding: 8px; margin-bottom: 6px; font-size: 13px;">
-        <div style="display: flex; gap: 6px; justify-content: flex-end;">
-            <button id="btnRapidoCancelar" type="button" style="padding: 4px 8px; background: #718096; color: white; font-size: 12px;">Cancelar</button>
-            <button id="btnRapidoGuardar" type="button" style="padding: 4px 12px; background: #3182ce; color: white; font-size: 12px;">Guardar</button>
-        </div>
-    </div>
-</div>
-                <div style="display:flex; flex-direction:column;">
-                    <label style="font-size:12px; font-weight:bold; color:#4a5568; margin-bottom:4px;">Monto ($)</label>
-                    <input type="number" step="0.01" id="montoRegistro" placeholder="0.00" style="padding:10px; border-radius:6px; border:1px solid #cbd5e0;">
+                    <div id="subFormCategoriaRapida" class="sub-form-popup-standard">
+                        <input type="hidden" id="rapidoIdDetalle">
+                        <input type="text" id="rapidoInputNombre" placeholder="Nombre de la nueva categoría..." class="sub-form-input-full">
+                        <div class="flex-row gap-6 justify-end">
+                            <button id="btnRapidoCancelar" type="button" class="btn-quick-cancel">Cancelar</button>
+                            <button id="btnRapidoGuardar" type="button" class="btn-quick-save">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-column">
+                    <label class="input-label label-dark">Monto ($)</label>
+                    <input type="number" step="0.01" id="montoRegistro" placeholder="0.00" class="custom-input-number">
                 </div>
             </div>
-            <button id="btnRegistrarGasto" class="btn-add" style="background-color: #6b46c1;">Registrar Gasto</button>
+            <button id="btnRegistrarGasto" class="btn-add btn-expense-submit">Registrar Gasto</button>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; flex-wrap: wrap;">
+        <div class="form-grid-split">
             <div>
                 <h3>Resumen Global</h3>
-                <div id="resumenGlobal" style="font-size: 24px; font-weight: bold; color: #117a65; background:#e8f8f5; padding: 15px 20px; border-radius: 6px; margin-bottom: 20px; text-align: center;">
+                <div id="resumenGlobal" class="global-summary-box">
                     $0.00
                 </div>
 
@@ -204,11 +205,11 @@
                         <thead>
                             <tr>
                                 <th>Tipo Gasto</th>
-                                <th style="text-align:right;">Total</th>
+                                <th class="text-right">Total</th>
                             </tr>
                         </thead>
                         <tbody id="resumenPorTipo">
-                            <tr><td colspan="2" style="text-align:center;">Sin registros.</td></tr>
+                            <tr><td colspan="2" class="text-center">Sin registros.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -223,12 +224,12 @@
                                 <th>Fecha</th>
                                 <th>Tipo</th>
                                 <th>Detalle</th>
-                                <th style="text-align:right;">Monto</th>
-                                <th style="text-align:center;">Acción</th>
+                                <th class="text-right">Monto</th>
+                                <th class="text-center">Acción</th>
                             </tr>
                         </thead>
                         <tbody id="tablaRegistroGastos">
-                            <tr><td colspan="5" style="text-align:center;">Cargando registros...</td></tr>
+                            <tr><td colspan="5" class="text-center">Cargando registros...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -236,20 +237,8 @@
         </div>
     </div>
 
-    <div id="contenedorFormMatriz" class="container" style="max-width: 95%; margin-top: 30px; display: none;">
-        <h2>4. Matriz de Control de Celdas (Vista de Hojas)</h2>
-        <div id="camposDinamicosMatriz" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 15px;"></div>
-        <button id="btnGuardarFilaMatriz" class="btn-add" style="background-color: #2c3e50; width: 100%;">Guardar Fila Operacional</button>
-        
-        <h3 style="margin-top: 20px;">Matriz en la Nube</h3>
-        <div class="table-container">
-            <table>
-                <thead id="encabezadoMatriz"></thead>
-                <tbody id="cuerpoMatriz"></tbody>
-            </table>
-        </div>
-    </div>
-    
+    <select id="filtroGlobalAnio" class="visual-hidden"><option value="2026">2026</option></select>
+    <select id="filtroGlobalMes" class="visual-hidden"><option value="ENERO">ENERO</option></select>
 
     <script src="script.js"></script>
     <script src="detalle.js"></script>

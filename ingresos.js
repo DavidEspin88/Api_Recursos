@@ -1,13 +1,15 @@
 (() => {
-    const filtroMesAnioIngreso = document.getElementById("filtroMesAnioIngreso");
+    // Componentes interactivos de la sección de ingresos
     const fechaIngreso = document.getElementById("fechaIngreso");
     const nombreIngreso = document.getElementById("nombreIngreso");
     const montoIngreso = document.getElementById("montoIngreso");
     const btnRegistrarIngreso = document.getElementById("btnRegistrarIngreso");
     const totalMontoIngresos = document.getElementById("totalMontoIngresos");
-    const balanceNetoMensual = document.getElementById("balanceNetoMensual"); // Nuevo elemento
+    const balanceNetoMensual = document.getElementById("balanceNetoMensual");
     const tablaIngresosCuerpo = document.getElementById("tablaIngresosCuerpo");
+    const filtroMesAnioIngreso = document.getElementById("filtroMesAnioIngreso");
 
+    // Subformulario rápido de fuentes de ingresos
     const btnIngRapidoAdd = document.getElementById("btnIngRapidoAdd");
     const btnIngRapidoEdit = document.getElementById("btnIngRapidoEdit");
     const btnIngRapidoDelete = document.getElementById("btnIngRapidoDelete");
@@ -17,9 +19,15 @@
     const btnFuenteCancelar = document.getElementById("btnFuenteCancelar");
     const btnFuenteGuardar = document.getElementById("btnFuenteGuardar");
 
-    btnRegistrarIngreso.addEventListener("click", registrarNuevoIngreso);
-    filtroMesAnioIngreso.addEventListener("change", () => window.renderizarModuloIngresos());
-    nombreIngreso.addEventListener("change", gestionarBotonesFuente);
+    // Escuchas reactivas
+    btnRegistrarIngreso.addEventListener("click", registrarNuevoIngresoMovimiento);
+    nombreIngreso.addEventListener("change", gestionarBotonesFuenteVisuales);
+    
+    filtroMesAnioIngreso.addEventListener("change", () => {
+        if (typeof window.cargarDatosCentral === "function") {
+            window.cargarDatosCentral();
+        }
+    });
 
     btnIngRapidoAdd.addEventListener("click", () => abrirSubFormFuente(false));
     btnIngRapidoEdit.addEventListener("click", () => abrirSubFormFuente(true));
@@ -27,83 +35,115 @@
     btnFuenteCancelar.addEventListener("click", cerrarSubFormFuente);
     btnFuenteGuardar.addEventListener("click", guardarFuenteCatalogo);
 
-    if (!filtroMesAnioIngreso.value) {
-        const hoy = new Date();
-        filtroMesAnioIngreso.value = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
-    }
-
     window.renderizarModuloIngresos = function() {
         const data = window.apiCache;
-        const mesAnioFiltro = filtroMesAnioIngreso.value; // Ejemplo: "2026-01"
+        
+        const partesFiltro = filtroMesAnioIngreso.value.split("-");
+        const anioFiltroNum = parseInt(partesFiltro[0], 10);
+        const mesFiltroNum = parseInt(partesFiltro[1], 10); 
 
-        // 1. Cargar catálogo de Fuentes
-        const fuenteSeleccionadaAnterior = nombreIngreso.value;
+        // 1. Cargar catálogo de Fuentes de Ingreso en el selector secundario
+        const fuenteSeleccionada = nombreIngreso.value;
         nombreIngreso.innerHTML = `<option value="">-- Seleccione Fuente --</option>`;
         
         const fuentesCatalogo = (data.detalleGasto || []).filter(d => d.idGasto === "INGRESOS_CAT" && d.estado !== "INACTIVO");
         fuentesCatalogo.forEach(f => {
             nombreIngreso.innerHTML += `<option value="${f.idDetalleGasto}">${f.nombreGasto}</option>`;
         });
-        nombreIngreso.value = fuenteSeleccionadaAnterior;
-        gestionarBotonesFuente();
+        nombreIngreso.value = fuenteSeleccionada;
+        gestionarBotonesFuenteVisuales();
 
-        // 2. Pintar registros de Ingresos filtrados por mes
+        // 2. Pintar registros de Ingresos filtrados por el periodo de consulta
         tablaIngresosCuerpo.innerHTML = "";
         let sumatoriaIngresos = 0;
 
         const listaIngresos = data.ingresos || [];
         const ingresosFiltrados = listaIngresos.filter(ing => {
-            const mesRegistro = ing.mesAnio ? ing.mesAnio : String(ing.fecha).substring(0, 7);
-            return mesRegistro === mesAnioFiltro;
+            let fechaAnalizar = ing.fecha; 
+            
+            if (ing.mesAnio && ing.mesAnio.includes("-")) {
+                fechaAnalizar = ing.mesAnio;
+            }
+
+            if (!fechaAnalizar) return false;
+
+            const partes = fechaAnalizar.split(/[-/]/);
+            if (partes.length < 2) return false;
+
+            let regAnio = 0;
+            let regMes = 0;
+
+            if (partes[0].length === 4) {
+                regAnio = parseInt(partes[0], 10);
+                regMes = parseInt(partes[1], 10);
+            } else if (partes[2] && partes[2].length === 4) {
+                regAnio = parseInt(partes[2], 10);
+                regMes = parseInt(partes[1], 10);
+            }
+
+            return regAnio === anioFiltroNum && regMes === mesFiltroNum;
         });
 
         if (ingresosFiltrados.length === 0) {
-            tablaIngresosCuerpo.innerHTML = `<tr><td colspan="5" style="text-align:center; font-style:italic; padding:15px;">No existen ingresos registrados en este mes (${mesAnioFiltro}).</td></tr>`;
+            tablaIngresosCuerpo.innerHTML = `<tr><td colspan="5" class="text-center" style="font-style:italic; padding:15px;">No existen ingresos registrados en este mes (${filtroMesAnioIngreso.value}).</td></tr>`;
         } else {
             ingresosFiltrados.forEach(ing => {
-                sumatoriaIngresos += ing.monto;
+                const valorMonto = parseFloat(ing.monto) || 0;
+                sumatoriaIngresos += valorMonto;
 
                 const fila = document.createElement("tr");
                 fila.innerHTML = `
                     <td><strong>${ing.idIngreso}</strong></td>
                     <td>${ing.fecha}</td>
                     <td>${ing.nombre}</td>
-                    <td style="text-align:right; font-weight:bold; color:#234e52;">$${ing.monto.toFixed(2)}</td>
-                    <td style="text-align:center;">
-                        <button class="btn-action-delete btn-borrar-ing" data-id="${ing.idIngreso}">Eliminar</button>
-                    </td>
+                    <td class="text-right" style="font-weight:bold; color:#234e52;">$${valorMonto.toFixed(2)}</td>
+                    <td class="text-center"></td>
                 `;
-                fila.querySelector(".btn-borrar-ing").addEventListener("click", () => eliminarIngresoRegistro(ing.idIngreso));
+
+                const btnEliminar = document.createElement("button");
+                btnEliminar.className = "btn-action-delete";
+                btnEliminar.textContent = "Eliminar";
+                btnEliminar.addEventListener("click", () => eliminarIngresoRegistroFila(ing.idIngreso));
+                
+                fila.children[4].appendChild(btnEliminar);
                 tablaIngresosCuerpo.appendChild(fila);
             });
         }
 
         totalMontoIngresos.textContent = `$${sumatoriaIngresos.toFixed(2)}`;
 
-        // 3. NUEVO: CALCULO DE GASTOS DEL MISMO MES PARA EL BALANCE GLOBAL
+        // 3. BALANCE GLOBAL: Interconexión con la sumatoria paralela de gastos del mismo mes
         let sumatoriaGastos = 0;
         const listaGastos = data.registroGasto || [];
         
         listaGastos.forEach(g => {
-            const mesGasto = String(g.fecha).substring(0, 7);
-            if (mesGasto === mesAnioFiltro) {
-                sumatoriaGastos += g.monto;
+            if (!g.fecha) return;
+
+            const partesGasto = g.fecha.split(/[-/]/);
+            if (partesGasto.length < 2) return;
+
+            let gastoAnio = 0;
+            let gastoMes = 0;
+
+            if (partesGasto[0].length === 4) {
+                gastoAnio = parseInt(partesGasto[0], 10);
+                gastoMes = parseInt(partesGasto[1], 10);
+            } else if (partesGasto[2] && partesGasto[2].length === 4) {
+                gastoAnio = parseInt(partesGasto[2], 10);
+                gastoMes = parseInt(partesGasto[1], 10);
+            }
+
+            if (gastoAnio === anioFiltroNum && gastoMes === mesFiltroNum) {
+                sumatoriaGastos += (parseFloat(g.monto) || 0); 
             }
         });
 
-        // Operación Ingresos - Gastos
         const saldoNeto = sumatoriaIngresos - sumatoriaGastos;
         balanceNetoMensual.textContent = `$${saldoNeto.toFixed(2)}`;
-
-        // Cambiar el color dinámicamente si estás en números verdes o rojos
-        if (saldoNeto >= 0) {
-            balanceNetoMensual.style.color = "#2f855a"; // Verde
-        } else {
-            balanceNetoMensual.style.color = "#e53e3e"; // Rojo
-        }
+        balanceNetoMensual.style.color = (saldoNeto >= 0) ? "#2f855a" : "#e53e3e";
     };
 
-    function gestionarBotonesFuente() {
+    function gestionarBotonesFuenteVisuales() {
         if (nombreIngreso.value) {
             btnIngRapidoEdit.style.display = "block";
             btnIngRapidoDelete.style.display = "block";
@@ -134,7 +174,7 @@
     }
 
     function guardarFuenteCatalogo() {
-        const nombreFuente = rapidoInputFuente.value.trim();
+        const nombreFuente = rapidoInputFuente.value.trim().toUpperCase();
         const idFuente = rapidoIdFuente.value;
 
         if (!nombreFuente) return alert("Ingrese un nombre de fuente válido.");
@@ -157,7 +197,9 @@
         .then(result => {
             if (result.status === "success") {
                 cerrarSubFormFuente();
-                location.reload();
+                if (typeof window.cargarDatosCentral === "function") {
+                    window.cargarDatosCentral();
+                }
             } else alert(result.message);
         })
         .finally(() => btnFuenteGuardar.disabled = false);
@@ -174,12 +216,15 @@
         })
         .then(res => res.json())
         .then(r => {
-            if (r.status === "success") location.reload();
-            else alert("Aviso: " + r.message);
+            if (r.status === "success") {
+                if (typeof window.cargarDatosCentral === "function") {
+                    window.cargarDatosCentral();
+                }
+            } else alert("Aviso: " + r.message);
         });
     }
 
-    function registrarNuevoIngreso() {
+    function registrarNuevoIngresoMovimiento() {
         const fecha = fechaIngreso.value;
         const fuenteId = nombreIngreso.value;
         const fuenteTexto = nombreIngreso.selectedIndex >= 0 ? nombreIngreso.options[nombreIngreso.selectedIndex].text : "";
@@ -201,15 +246,29 @@
         fetch(window.WEB_APP_URL, { method: "POST", mode: "cors", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(result => {
-            if (result.status === "success") location.reload();
-            else alert(result.message);
+            if (result.status === "success") {
+                fechaIngreso.value = "";
+                montoIngreso.value = "";
+                if (typeof window.cargarDatosCentral === "function") {
+                    window.cargarDatosCentral();
+                }
+            } else alert(result.message);
         })
         .finally(() => btnRegistrarIngreso.disabled = false);
     }
 
-    function eliminarIngresoRegistro(id) {
+    function eliminarIngresoRegistroFila(id) {
         if (!confirm(`¿Desea eliminar el registro de ingreso ${id}?`)) return;
-        fetch(window.WEB_APP_URL, { method: "POST", mode: "cors", body: JSON.stringify({ target: "ingresos", action: "delete", id: id }) })
-        .then(res => res.json()).then(() => location.reload());
+        fetch(window.WEB_APP_URL, { 
+            method: "POST", 
+            mode: "cors", 
+            body: JSON.stringify({ target: "ingresos", action: "delete", id: id }) 
+        })
+        .then(res => res.json())
+        .then(() => {
+            if (typeof window.cargarDatosCentral === "function") {
+                window.cargarDatosCentral();
+            }
+        });
     }
 })();

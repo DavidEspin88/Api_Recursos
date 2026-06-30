@@ -1,195 +1,157 @@
 (() => {
- 
+    // Captura de elementos del DOM del Administrador Unificado de Categorías
     const tablaDetalles = document.getElementById("tablaDetalles");
     const selectTipoGastoDetalle = document.getElementById("selectTipoGastoDetalle");
     const inputNombre = document.getElementById("nombreGastoDetalle");
     const inputIdOculto = document.getElementById("editIdDetalleGasto");
     const btnGuardar = document.getElementById("btnGuardarDetalle");
 
-  btnGuardar.addEventListener("click", guardarDetail);
+    btnGuardar.addEventListener("click", guardarCategoriaDetalle);
 
-  // Expuesto globalmente para ser invocado de forma reactiva
-window.renderizarModuloDetalles = function() {
+    // Exponer el módulo de renderizado de forma global para la reactividad de script.js
+    window.renderizarModuloDetalles = function() {
         const data = window.apiCache;
         
-        // 1. Rellenar selectores de tipos de gasto en el formulario de categorías
-        const valorDetalleSelect = selectTipoGastoDetalle.value;
+        // 1. Sincronizar selectores de tipos de gasto en el formulario de la sección 2
+        const valorDetalleSelectActual = selectTipoGastoDetalle.value;
         selectTipoGastoDetalle.innerHTML = `<option value="">-- Seleccionar Tipo --</option>`;
         (data.gasto || []).forEach(g => {
             selectTipoGastoDetalle.innerHTML += `<option value="${g.idGasto}">${g.nombreGasto}</option>`;
         });
-        selectTipoGastoDetalle.value = valorDetalleSelect;
+        selectTipoGastoDetalle.value = valorDetalleSelectActual;
 
         // 2. Pintar la tabla del Catálogo de Categorías
         tablaDetalles.innerHTML = "";
-        const lista = data.detalleGasto || [];
+        const listaCategorias = data.detalleGasto || [];
 
-        if (lista.length === 0) {
-            tablaDetalles.innerHTML = `<tr><td colspan="5" style="text-align:center;">No hay categorías configuradas.</td></tr>`;
+        if (listaCategorias.length === 0) {
+            tablaDetalles.innerHTML = `<tr><td colspan="5" class="text-center">No hay categorías configuradas.</td></tr>`;
             return;
         }
 
-        lista.forEach(item => {
+        listaCategorias.forEach(item => {
             const fila = document.createElement("tr");
-            const esActivo = item.estado !== "INACTIVO";
-            
-            fila.innerHTML = `
-                <td><strong>${item.idDetalleGasto}</strong></td>
-                <td><span class="badge-gasto" style="background:#edf2f7; padding:4px 8px; border-radius:4px; font-weight:bold;">${item.nombreGasto}</span></td>
-                <td>${item.idGasto}</td>
-                <td>
-                    <span style="color: ${esActivo ? '#2f855a' : '#e53e3e'}; font-weight: bold;">
-                        ${item.estado || "ACTIVO"}
-                    </span>
-                </td>
-                <td style="text-align: center;">
-                    <button class="btn-action-edit btn-editar-detalle">Editar</button>
-                    <button class="btn-action-edit btn-toggle-detalle" style="background-color:#4a5568; color:white;">Alternar</button>
-                    <button class="btn-action-delete btn-borrar-detalle">Borrar</button>
-                </td>
-            `;
 
-            fila.querySelector(".btn-editar-detalle").addEventListener("click", () => prepararEdicion(item));
-            fila.querySelector(".btn-toggle-detalle").addEventListener("click", () => alternarEstado(item.idDetalleGasto));
-            fila.querySelector(".btn-borrar-detalle").addEventListener("click", () => eliminarDetalle(item.idDetalleGasto));
-            
+            const celdaId = document.createElement("td");
+            celdaId.textContent = item.idDetalleGasto;
+            fila.appendChild(celdaId);
+
+            const celdaTipo = document.createElement("td");
+            celdaTipo.innerHTML = `<strong>${item.nombreGastoPadre || "No asignado"}</strong>`;
+            fila.appendChild(celdaTipo);
+
+            const celdaNombre = document.createElement("td");
+            celdaNombre.textContent = item.nombreGasto;
+            fila.appendChild(celdaNombre);
+
+            const celdaEstado = document.createElement("td");
+            celdaEstado.textContent = item.estado || "ACTIVO";
+            fila.appendChild(celdaEstado);
+
+            const celdaAcciones = document.createElement("td");
+            celdaAcciones.className = "text-center";
+
+            // Botón Editar de Categoría
+            const btnEditar = document.createElement("button");
+            btnEditar.textContent = "Editar";
+            btnEditar.className = "btn-action-edit";
+            btnEditar.addEventListener("click", () => prepararEdicionCategoria(item));
+
+            // Botón Eliminar de Categoría
+            const btnEliminar = document.createElement("button");
+            btnEliminar.textContent = "Eliminar";
+            btnEliminar.className = "btn-action-delete";
+            btnEliminar.addEventListener("click", () => eliminarCategoriaDetalle(item.idDetalleGasto));
+
+            celdaAcciones.appendChild(btnEditar);
+            celdaAcciones.appendChild(btnEliminar);
+            fila.appendChild(celdaAcciones);
+
             tablaDetalles.appendChild(fila);
         });
     };
 
-  function cargarDetalles() {
-    fetch(WEB_APP_URL)
-      .then((response) => {
-        if (!response.ok) throw new Error("Error de red al intentar conectar.");
-        return response.json();
-      })
-      .then((data) => {
-        tablaDetalles.innerHTML = "";
+    function guardarCategoriaDetalle() {
+        const idGastoPadre = selectTipoGastoDetalle.value;
+        const nombreCategoria = inputNombre.value.trim().toUpperCase();
+        const idDetalle = inputIdOculto.value;
 
-        // Forzamos la captura verificando la estructura exacta del objeto devuelto
-        const lista = data.detalleGasto || data.detalle;
-
-        if (!lista || lista.length === 0) {
-          tablaDetalles.innerHTML = `<tr><td colspan="3" style="text-align:center;">No hay detalles de gastos registrados.</td></tr>`;
-          return;
+        if (!idGastoPadre || !nombreCategoria) {
+            alert("Por favor, seleccione el Tipo de Gasto e ingrese el Nombre de la Categoría.");
+            return;
         }
-
-        lista.forEach((item) => {
-          const fila = document.createElement("tr");
-
-          // Verificamos que las propiedades internas existan antes de pintar la celda
-          const idGastoDetalle = item.idDetalleGasto || item.idGasto;
-          const nombreGastoText = item.nombreGasto;
-
-          fila.innerHTML = `
-                        <td><strong>${idGastoDetalle}</strong></td>
-                        <td>${nombreGastoText}</td>
-                        <td style="text-align: center;">
-                            <button class="btn-action-edit btn-editar-detalle">Editar</button>
-                            <button class="btn-action-delete btn-borrar-detalle">Borrar</button>
-                        </td>
-                    `;
-
-          // Asignación de eventos segura
-          fila
-            .querySelector(".btn-editar-detalle")
-            .addEventListener("click", () =>
-              prepararEdicion(idGastoDetalle, nombreGastoText),
-            );
-          fila
-            .querySelector(".btn-borrar-detalle")
-            .addEventListener("click", () => eliminarDetalle(idGastoDetalle));
-
-          tablaDetalles.appendChild(fila);
-        });
-      })
-      .catch((error) => {
-        console.error("Error detallado de renderizado:", error);
-        tablaDetalles.innerHTML = `<tr><td colspan="3" style="text-align:center; color:red;">Error al procesar o renderizar los datos.</td></tr>`;
-      });
-  }
-function alternarEstado(id) {
-        fetch(window.WEB_APP_URL, { method: "POST", body: JSON.stringify({ target: "detalle_gasto", action: "toggle_estado", id: id }) })
-        .then(res => res.json()).then(() => location.reload());
-    }
-function guardarDetail() {
-        const nombre = inputNombre.value.trim();
-        const idGastoSelect = selectTipoGastoDetalle.value;
-        const id = inputIdOculto.value;
-
-        if (!idGastoSelect) return alert("Por favor, seleccione un Tipo de Gasto ejecutor.");
-        if (!nombre) return alert("Por favor, ingrese un nombre de categoría válido.");
 
         let payload = {
             target: "detalle_gasto",
             action: "create",
-            idGasto: idGastoSelect,
-            nombreGasto: nombre
+            idGasto: idGastoPadre,
+            nombreGasto: nombreCategoria
         };
 
-        if (id) {
+        if (idDetalle) {
             payload.action = "update";
-            payload.idDetalleGasto = id;
+            payload.idDetalleGasto = idDetalle;
         }
 
         btnGuardar.disabled = true;
-        fetch(window.WEB_APP_URL, { method: "POST", mode: "cors", body: JSON.stringify(payload) })
+        fetch(window.WEB_APP_URL, {
+            method: "POST",
+            mode: "cors",
+            body: JSON.stringify(payload)
+        })
         .then(res => res.json())
         .then(result => {
             if (result.status === "success") {
-                restablecerFormulario();
-                // Provoca una recarga limpia invocando al cargador central de script.js
-                document.dispatchEvent(new Event("DOMContentLoaded"));
-                location.reload(); 
+                restablecerFormularioCategoria();
+                if (typeof window.cargarDatosCentral === "function") {
+                    window.cargarDatosCentral();
+                }
             } else {
                 alert("Error: " + result.message);
             }
         })
-        .catch(() => alert("Error de comunicación de red."))
+        .catch(() => alert("Error de comunicación con la red remota."))
         .finally(() => btnGuardar.disabled = false);
     }
 
-  function eliminarDetalle(id) {
-    if (!confirm(`¿Desea eliminar de forma permanente la categoría ${id}?`))
-      return;
-    fetch(window.WEB_APP_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        target: "detalle_gasto",
-        action: "delete",
-        id: id,
-      }),
-    })
-      .then((res) => res.json())
-      .then((r) =>
-        r.status === "success" ? location.reload() : alert(r.message),
-      );
-  }
+    function eliminarCategoriaDetalle(id) {
+        if (!confirm(`¿Desea eliminar de forma permanente la categoría ${id}?`)) return;
+        
+        fetch(window.WEB_APP_URL, {
+            method: "POST",
+            body: JSON.stringify({
+                target: "detalle_gasto",
+                action: "delete",
+                id: id
+            })
+        })
+        .then(res => res.json())
+        .then(r => {
+            if (r.status === "success") {
+                if (typeof window.cargarDatosCentral === "function") {
+                    window.cargarDatosCentral();
+                }
+            } else {
+                alert(r.message);
+            }
+        });
+    }
 
-function prepararEdicion(item) {
+    function prepararEdicionCategoria(item) {
         inputIdOculto.value = item.idDetalleGasto;
-        inputNombre.value = item.nombreGasto; // Corregido: Muestra el nombre real de la subcategoría
+        inputNombre.value = item.nombreGasto;
         selectTipoGastoDetalle.value = item.idGasto; 
         
         btnGuardar.textContent = "Actualizar Categoría";
-        btnGuardar.style.backgroundColor = "#d69e2e";
+        btnGuardar.className = "btn-edit-mode";
         inputNombre.focus();
     }
 
-  function prepararEdicion(id, nombre) {
-    inputIdOculto.value = id;
-    inputNombre.value = nombre;
-
-    btnGuardar.textContent = "Actualizar Detalle";
-    btnGuardar.style.backgroundColor = "#d69e2e";
-    inputNombre.focus();
-  }
-
-function restablecerFormulario() {
+    function restablecerFormularioCategoria() {
         inputIdOculto.value = "";
         inputNombre.value = "";
         selectTipoGastoDetalle.value = "";
         btnGuardar.textContent = "Crear Categoría";
-        btnGuardar.style.backgroundColor = "#1abc9c";
+        btnGuardar.className = "btn-add btn-w-full";
     }
 })();
