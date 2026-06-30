@@ -1,25 +1,278 @@
 (() => {
-    // REEMPLAZA CON TU URL SI ES DIFERENTE (misma Web App de Google Apps Script)
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwjpL9sc5LArWMyC8yMprHmfjdhOPnanlKS5hy26WzWsuSOfdcnpGS6ZE4KCCvYe5wx/exec";
+    const tipoGastoRegistro = document.getElementById("tipoGastoRegistro");
+    const detalleRegistro = document.getElementById("detalleRegistro");
+    const buscarDetalleTransaccion = document.getElementById("buscarDetalleTransaccion");
+    const fechaRegistro = document.getElementById("fechaRegistro");
+    const montoRegistro = document.getElementById("montoRegistro");
+    const btnRegistrarGasto = document.getElementById("btnRegistrarGasto");
 
-    // Elementos del DOM
-    const inputFecha = document.getElementById("fechaRegistro");
-    const selectTipoGasto = document.getElementById("tipoGastoRegistro");
-    const contenedorDetalle = document.getElementById("contenedorDetalleRegistro");
-    const inputMonto = document.getElementById("montoRegistro");
-    const btnRegistrar = document.getElementById("btnRegistrarGasto");
-    const tablaRegistros = document.getElementById("tablaRegistroGastos");
+    const tablaRegistroGastos = document.getElementById("tablaRegistroGastos");
     const resumenGlobal = document.getElementById("resumenGlobal");
     const resumenPorTipo = document.getElementById("resumenPorTipo");
 
-    // Caché en memoria de los catálogos para no repetir peticiones innecesarias
-    let cacheCatalogoGastos = [];
-    let cacheCatalogoDetalles = [];
-    let cacheRegistros = [];
+    // NUEVOS ELEMENTOS COMPONENTES (CRUD rápido en línea)
+    const btnRapidoAdd = document.getElementById("btnRapidoAdd");
+    const btnRapidoEdit = document.getElementById("btnRapidoEdit");
+    const btnRapidoDelete = document.getElementById("btnRapidoDelete");
+    const subFormCategoriaRapida = document.getElementById("subFormCategoriaRapida");
+    const rapidoIdDetalle = document.getElementById("rapidoIdDetalle");
+    const rapidoInputNombre = document.getElementById("rapidoInputNombre");
+    const btnRapidoCancelar = document.getElementById("btnRapidoCancelar");
+    const btnRapidoGuardar = document.getElementById("btnRapidoGuardar");
 
-    document.addEventListener("DOMContentLoaded", inicializar);
-    btnRegistrar.addEventListener("click", registrarGasto);
-    selectTipoGasto.addEventListener("change", actualizarCampoDetalle);
+    // Listeners operacionales
+    btnRegistrarGasto.addEventListener("click", crearTransaccion);
+    tipoGastoRegistro.addEventListener("change", filtrarCategoriasSegunTipo);
+    buscarDetalleTransaccion.addEventListener("input", filtrarPorBusquedaText);
+    detalleRegistro.addEventListener("change", gestionarVisibilidadBotonesEdicion);
+
+    // Listeners del CRUD rápido en línea
+    btnRapidoAdd.addEventListener("click", () => abrirSubForm(false));
+    btnRapidoEdit.addEventListener("click", () => abrirSubForm(true));
+    btnRapidoDelete.addEventListener("click", ejecutarEliminacionRapida);
+    btnRapidoCancelar.addEventListener("click", cerrarSubForm);
+    btnRapidoGuardar.addEventListener("click", ejecutarGuardadoRapido);
+
+window.renderizarModuloRegistro = function() {
+        const data = window.apiCache;
+
+        // Rellenar selector de Tipos de Gasto transaccionales
+        const valorSeleccionado = tipoGastoRegistro.value;
+        tipoGastoRegistro.innerHTML = `<option value="">-- Seleccione --</option>`;
+        (data.gasto || []).forEach(g => {
+            tipoGastoRegistro.innerHTML += `<option value="${g.idGasto}">${g.nombreGasto}</option>`;
+        });
+        tipoGastoRegistro.value = valorSeleccionado;
+
+        // Renderizar Historial de Movimientos
+        tablaRegistroGastos.innerHTML = "";
+        let totalAcumulado = 0;
+        let totalesPorTipo = {};
+
+        const registros = data.registroGasto || [];
+        if (registros.length === 0) {
+            tablaRegistroGastos.innerHTML = `<tr><td colspan="5" style="text-align:center;">Sin movimientos registrados.</td></tr>`;
+        } else {
+            registros.forEach(r => {
+                totalAcumulado += r.monto;
+                totalesPorTipo[r.nombreGasto] = (totalesPorTipo[r.nombreGasto] || 0) + r.monto;
+
+                const fila = document.createElement("tr");
+                fila.innerHTML = `
+                    <td>${r.fecha}</td>
+                    <td><span class="badge-tipo" style="background:#e8f8f5; padding:4px 8px; border-radius:4px; font-weight:bold;">${r.nombreGasto}</span></td>
+                    <td>${r.detalleGasto}</td>
+                    <td style="text-align:right; font-weight:bold;">$${r.monto.toFixed(2)}</td>
+                    <td style="text-align:center;"><button class="btn-action-delete btn-borrar-reg" data-id="${r.idRegistro}">Eliminar</button></td>
+                `;
+                fila.querySelector(".btn-borrar-reg").addEventListener("click", () => eliminarTransaccion(r.idRegistro));
+                tablaRegistroGastos.appendChild(fila);
+            });
+        }
+
+        // Renderizar Cuadros Analíticos
+        resumenGlobal.textContent = `$${totalAcumulado.toFixed(2)}`;
+        resumenPorTipo.innerHTML = "";
+        if (Object.keys(totalesPorTipo).length === 0) {
+            resumenPorTipo.innerHTML = `<tr><td colspan="2" style="text-align:center;">Sin cómputos acumulados.</td></tr>`;
+        } else {
+            for (let t in totalesPorTipo) {
+                resumenPorTipo.innerHTML += `<tr><td><strong>${t}</strong></td><td style="text-align:right; color:#2c3e50; font-weight:bold;">$${totalesPorTipo[t].toFixed(2)}</td></tr>`;
+            }
+        }
+    };
+
+function filtrarCategoriasSegunTipo() {
+        const idGastoBuscado = tipoGastoRegistro.value;
+        detalleRegistro.innerHTML = "";
+        buscarDetalleTransaccion.value = "";
+        cerrarSubForm();
+
+        if (!idGastoBuscado) {
+            detalleRegistro.disabled = true;
+            detalleRegistro.style.background = "#edf2f7";
+            buscarDetalleTransaccion.style.display = "none";
+            detalleRegistro.innerHTML = `<option value="">-- Seleccione un Tipo de Gasto primero --</option>`;
+            ocultarBotonesCrudRapido();
+            return;
+        }
+
+        const tipoObjeto = window.apiCache.gasto.find(g => g.idGasto === idGastoBuscado);
+        const textoNombreGasto = tipoObjeto ? tipoObjeto.nombreGasto.toUpperCase().trim() : "";
+
+        // Filtrado unificado por ID y por Nombre
+        const categoriasFiltradas = (window.apiCache.detalleGasto || []).filter(d => {
+            const coincideId = d.idGasto.toUpperCase().trim() === idGastoBuscado.toUpperCase().trim();
+            const coincideNombre = d.idGasto.toUpperCase().trim() === textoNombreGasto; 
+            return (coincideId || coincideNombre) && d.estado !== "INACTIVO";
+        });
+
+        // Activación del campo de detalle
+        detalleRegistro.disabled = false;
+        detalleRegistro.style.background = "white";
+        buscarDetalleTransaccion.style.display = "block"; 
+
+        // Mostrar el botón '+' para agregar subcategorías en cualquier tipo de gasto
+        btnRapidoAdd.style.display = "block";
+        gestionarVisibilidadBotonesEdicion();
+
+        detalleRegistro.innerHTML = `<option value="">-- Seleccione Categoría --</option>`;
+        categoriasFiltradas.forEach(c => {
+            // Guardamos el ID_DETALLE_GASTO en el 'value' del option para poder editar/borrar con precisión
+            detalleRegistro.innerHTML += `<option value="${c.idDetalleGasto}">${c.nombreGasto}</option>`;
+        });
+    }
+
+  function gestionarVisibilidadBotonesEdicion() {
+        const idDetalleSeleccionado = detalleRegistro.value;
+        // Solo mostramos editar y eliminar si hay una categoría real seleccionada (no la por defecto vacía)
+        if (idDetalleSeleccionado && idDetalleSeleccionado !== "") {
+            btnRapidoEdit.style.display = "block";
+            btnRapidoDelete.style.display = "block";
+        } else {
+            btnRapidoEdit.style.display = "none";
+            btnRapidoDelete.style.display = "none";
+        }
+    }
+
+    function ocultarBotonesCrudRapido() {
+        btnRapidoAdd.style.display = "none";
+        btnRapidoEdit.style.display = "none";
+        btnRapidoDelete.style.display = "none";
+    }
+
+    // --- ACCIONES INTERNAS DEL CRUD RÁPIDO ---
+    function abrirSubForm(esEdicion) {
+        if (esEdicion) {
+            const idDetalle = detalleRegistro.value;
+            const textoNombre = detalleRegistro.options[detalleRegistro.selectedIndex].text;
+            rapidoIdDetalle.value = idDetalle;
+            rapidoInputNombre.value = textoNombre;
+            btnRapidoGuardar.textContent = "Actualizar";
+        } else {
+            rapidoIdDetalle.value = "";
+            rapidoInputNombre.value = "";
+            btnRapidoGuardar.textContent = "Crear";
+        }
+        subFormCategoriaRapida.style.display = "block";
+        rapidoInputNombre.focus();
+    }
+
+    function cerrarSubForm() {
+        subFormCategoriaRapida.style.display = "none";
+        rapidoIdDetalle.value = "";
+        rapidoInputNombre.value = "";
+    }  
+
+    function ejecutarGuardadoRapido() {
+        const nombre = rapidoInputNombre.value.trim();
+        const idGastoSelect = tipoGastoRegistro.value;
+        const idDetalle = rapidoIdDetalle.value;
+
+        if (!nombre) return alert("Ingrese un nombre de categoría válido.");
+
+        let payload = {
+            target: "detalle_gasto",
+            action: "create",
+            idGasto: idGastoSelect,
+            nombreGasto: nombre
+        };
+
+        if (idDetalle) {
+            payload.action = "update";
+            payload.idDetalleGasto = idDetalle;
+        }
+
+        btnRapidoGuardar.disabled = true;
+        fetch(window.WEB_APP_URL, { method: "POST", mode: "cors", body: JSON.stringify(payload) })
+        .then(res => res.json())
+        .then(result => {
+            if (result.status === "success") {
+                cerrarSubForm();
+                // Forzar recarga de datos en cascada simulando el evento inicial del DOM
+                location.reload();
+            } else {
+                alert("Error: " + result.message);
+            }
+        })
+        .finally(() => btnRapidoGuardar.disabled = false);
+    }
+
+    function ejecutarEliminacionRapida() {
+        const idDetalle = detalleRegistro.value;
+        const textoNombre = detalleRegistro.options[detalleRegistro.selectedIndex].text;
+        if (!idDetalle) return;
+
+        if (!confirm(`¿Desea eliminar permanentemente la categoría: "${textoNombre}" de la base de datos?`)) return;
+
+        fetch(window.WEB_APP_URL, { 
+            method: "POST", 
+            body: JSON.stringify({ target: "detalle_gasto", action: "delete", id: idDetalle }) 
+        })
+        .then(res => res.json())
+        .then(r => {
+            if (r.status === "success") {
+                location.reload();
+            } else {
+                alert("Aviso: " + r.message);
+            }
+        });
+    }
+
+function filtrarPorBusquedaText() {
+        const textoInput = buscarDetalleTransaccion.value.toLowerCase();
+        const opciones = detalleRegistro.options;
+
+        for (let i = 1; i < opciones.length; i++) {
+            const textoOpcion = opciones[i].text.toLowerCase();
+            opciones[i].style.display = textoOpcion.includes(textoInput) ? "" : "none";
+        }
+    }
+
+function crearTransaccion() {
+        const fecha = fechaRegistro.value;
+        const tipoGasto = tipoGastoRegistro.value;
+        const detalleId = detalleRegistro.value;
+        
+        // Obtenemos el texto literal de la categoría para mandarlo al registro
+        const detalleTexto = detalleRegistro.options[detalleRegistro.selectedIndex] ? 
+                             detalleRegistro.options[detalleRegistro.selectedIndex].text : "";
+                             
+        const monto = parseFloat(montoRegistro.value);
+
+        if (!fecha || !tipoGasto || !detalleId || isNaN(monto) || monto <= 0) {
+            return alert("Por favor complete todos los campos transaccionales con valores lógicos.");
+        }
+
+        const tipoObjeto = window.apiCache.gasto.find(g => g.idGasto === tipoGasto);
+        const payload = {
+            target: "registro_gasto",
+            action: "create",
+            fecha: fecha,
+            idGasto: tipoGasto,
+            nombreGasto: tipoObjeto ? tipoObjeto.nombreGasto : "",
+            detalleGasto: detalleTexto, // Enviamos el nombre de la subcategoría
+            monto: monto
+        };
+
+        btnRegistrarGasto.disabled = true;
+        fetch(window.WEB_APP_URL, { method: "POST", mode: "cors", body: JSON.stringify(payload) })
+        .then(res => res.json())
+        .then(res => {
+            if (res.status === "success") {
+                fechaRegistro.value = ""; montoRegistro.value = "";
+                tipoGastoRegistro.value = ""; filtrarCategoriasSegunTipo();
+                location.reload(); 
+            } else alert(res.message);
+        })
+        .finally(() => btnRegistrarGasto.disabled = false);
+    }
+
+function eliminarTransaccion(id) {
+        if (!confirm("¿Desea dar de baja este movimiento financiero?")) return;
+        fetch(window.WEB_APP_URL, { method: "POST", body: JSON.stringify({ target: "registro_gasto", action: "delete", id: id }) })
+        .then(res => res.json()).then(() => location.reload());
+    }
 
     function inicializar() {
         fetch(WEB_APP_URL)
