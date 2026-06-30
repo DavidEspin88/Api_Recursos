@@ -6,7 +6,8 @@ window.apiCache = {
     gasto: [],
     detalleGasto: [],
     registroGasto: [],
-    matrizGastos: {}
+    matrizGastos: {},
+    ingresos: []
 };
 
 (() => {
@@ -57,6 +58,7 @@ window.apiCache = {
                 // Disparar renders de los otros scripts de manera reactiva y unificada
                 if (typeof window.renderizarModuloDetalles === "function") window.renderizarModuloDetalles();
                 if (typeof window.renderizarModuloRegistro === "function") window.renderizarModuloRegistro();
+                if (typeof window.renderizarModuloIngresos === "function") window.renderizarModuloIngresos();
                 
                 renderizarMatrizDinamica(data.matrizGastos);
                 inicializarFormularioMatriz(data.matrizGastos, data.detalleGasto);
