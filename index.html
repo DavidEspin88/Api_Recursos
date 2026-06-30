@@ -9,7 +9,7 @@
 <body>
 
     <div class="container">
-        <h2>Estructura de Gastos (Pestaña GASTO)</h2>
+        <h2>Estructura de Gastos</h2>
         
         <div class="form-group">
             <input type="hidden" id="editIdGasto"> 
@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="container">
-        <h2>Estructura de Detalles (Pestaña DETALLE_GASTO)</h2>
+        <h2>Estructura de Detalles</h2>
         
         <div class="form-group">
             <input type="hidden" id="editIdDetalleGasto"> 
@@ -62,20 +62,81 @@
             </table>
         </div>
     </div>
-<div class="container" style="max-width: 95%; margin-top: 30px;">
-        <h2>Matriz de Control Operacional de Gastos (Dinámica)</h2>
-        <p style="font-size: 13px; color: #666; font-style: italic;">Esta tabla genera sus columnas automáticamente usando los nombres creados en la sección superior.</p>
-        
+
+    <div class="container" style="max-width: 98%; margin-top: 30px;">
+        <h2>Registro de Gastos por Fecha</h2>
+        <p style="font-size: 13px; color: #666; font-style: italic;">
+            * Nota: Si el <strong>Tipo de Gasto</strong> seleccionado corresponde a "Gasto Fijo", el campo Detalle se carga automáticamente desde el catálogo de Detalles ya creado. Para otros tipos de gasto, el Detalle se escribe libremente.
+        </p>
+
+        <div style="background: #f8fafc; padding: 20px; border-radius: 6px; border: 1px dashed #cbd5e0; margin-bottom: 25px;">
+            <h4 style="margin-top: 0; color: #2c3e50;">Nuevo Registro</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                <div style="display:flex; flex-direction:column;">
+                    <label style="font-size:12px; font-weight:bold; color:#4a5568; margin-bottom:4px;">Fecha</label>
+                    <input type="date" id="fechaRegistro" style="padding:10px; border-radius:6px; border:1px solid #cbd5e0;">
+                </div>
+                <div style="display:flex; flex-direction:column;">
+                    <label style="font-size:12px; font-weight:bold; color:#4a5568; margin-bottom:4px;">Tipo de Gasto</label>
+                    <select id="tipoGastoRegistro" style="padding:10px; border-radius:6px; border:1px solid #cbd5e0; background:white;">
+                        <option value="">-- Seleccione Tipo de Gasto --</option>
+                    </select>
+                </div>
+                <div id="contenedorDetalleRegistro" style="display:flex; flex-direction:column;">
+                    <label style="font-size:12px; font-weight:bold; color:#4a5568; margin-bottom:4px;">Detalle</label>
+                    <select id="detalleRegistro" disabled style="padding:10px; border-radius:6px; border:1px solid #cbd5e0; background:#edf2f7;">
+                        <option value="">-- Seleccione un Tipo de Gasto primero --</option>
+                    </select>
+                </div>
+                <div style="display:flex; flex-direction:column;">
+                    <label style="font-size:12px; font-weight:bold; color:#4a5568; margin-bottom:4px;">Monto</label>
+                    <input type="number" step="0.01" id="montoRegistro" placeholder="0.00" style="padding:10px; border-radius:6px; border:1px solid #cbd5e0;">
+                </div>
+            </div>
+            <button id="btnRegistrarGasto" class="btn-add" style="background-color: #6b46c1;">Registrar Gasto</button>
+        </div>
+
+        <h3>Resumen Global</h3>
+        <div id="resumenGlobal" style="font-size: 22px; font-weight: bold; color: #117a65; background:#e8f8f5; padding: 15px 20px; border-radius: 6px; margin-bottom: 20px;">
+            $0.00
+        </div>
+
+        <h3>Resumen por Tipo de Gasto</h3>
+        <div class="table-container" style="margin-bottom: 25px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo de Gasto</th>
+                        <th style="text-align:right;">Total Acumulado</th>
+                    </tr>
+                </thead>
+                <tbody id="resumenPorTipo">
+                    <tr><td colspan="2" style="text-align:center;">Sin registros aún.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>Detalle de Registros</h3>
         <div class="table-container">
-            <table style="width: 100%;">
-                <thead id="encabezadoMatriz">
-                    </thead>
-                <tbody id="cuerpoMatriz">
-                    </tbody>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Tipo de Gasto</th>
+                        <th>Detalle</th>
+                        <th style="text-align:right;">Monto</th>
+                        <th style="text-align:center;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaRegistroGastos">
+                    <tr><td colspan="5" style="text-align:center;">Cargando registros...</td></tr>
+                </tbody>
             </table>
         </div>
     </div>
-    <script href="script.js" src="script.js"></script>
+
+    <script src="script.js"></script>
     <script src="detalle.js"></script>
+    <script src="registro.js"></script>
 </body>
 </html>

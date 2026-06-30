@@ -138,3 +138,20 @@ tr:hover {
 td strong {
     color: #4a5568;
 }
+
+th[rowspan="2"] {
+    vertical-align: middle;
+    border-right: 2px solid #4a5568;
+}
+
+td {
+    border: 1px solid #e2e8f0;
+}
+
+/* Resaltado especial para las celdas de MONTO (numéricas).
+   Estructura de la matriz: col 1 = ID_REGISTRO, col 2 = FECHA,
+   luego cada tipo de gasto aporta 2 columnas: DETALLE y MONTO.
+   Por eso las celdas de MONTO caen en posiciones pares a partir de la 4ta columna. */
+td:nth-child(n+4):nth-child(2n) {
+    font-variant-numeric: tabular-nums;
+}
