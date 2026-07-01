@@ -22,16 +22,16 @@
     const btnRapidoGuardar = document.getElementById("btnRapidoGuardar");
 
     // Asignación de Event Listeners
-    btnRegistrarGasto.addEventListener("click", crearTransaccionGasto);
-    tipoGastoRegistro.addEventListener("change", filtrarCategoriasSegunTipo);
-    buscarDetalleTransaccion.addEventListener("input", filtrarPorBusquedaTexto);
-    detalleRegistro.addEventListener("change", gestionarVisibilidadBotonesEdicion);
+    if (btnRegistrarGasto) btnRegistrarGasto.addEventListener("click", crearTransaccionGasto);
+    if (tipoGastoRegistro) tipoGastoRegistro.addEventListener("change", filtrarCategoriasSegunTipo);
+    if (buscarDetalleTransaccion) buscarDetalleTransaccion.addEventListener("input", filtrarPorBusquedaTexto);
+    if (detalleRegistro) detalleRegistro.addEventListener("change", gestionarVisibilidadBotonesEdicion);
 
-    btnRapidoAdd.addEventListener("click", () => abrirSubFormGastos(false));
-    btnRapidoEdit.addEventListener("click", () => abrirSubFormGastos(true));
-    btnRapidoDelete.addEventListener("click", ejecutarEliminacionRapidaCategoria);
-    btnRapidoCancelar.addEventListener("click", cerrarSubFormGastos);
-    btnRapidoGuardar.addEventListener("click", ejecutarGuardadoRapidoCategoria);
+    if (btnRapidoAdd) btnRapidoAdd.addEventListener("click", () => abrirSubFormGastos(false));
+    if (btnRapidoEdit) btnRapidoEdit.addEventListener("click", () => abrirSubFormGastos(true));
+    if (btnRapidoDelete) btnRapidoDelete.addEventListener("click", ejecutarEliminacionRapidaCategoria);
+    if (btnRapidoCancelar) btnRapidoCancelar.addEventListener("click", cerrarSubFormGastos);
+    if (btnRapidoGuardar) btnRapidoGuardar.addEventListener("click", ejecutarGuardadoRapidoCategoria);
 
     // Exponer función de renderizado de forma global
     window.renderizarModuloRegistroGastos = function() {
@@ -48,6 +48,8 @@
             tipoGastoRegistro.innerHTML += `<option value="${g.idGasto}">${g.nombreGasto}</option>`;
         });
         tipoGastoRegistro.value = valorSeleccionado;
+        
+        filtrarCategoriasSegunTipo();
 
         tablaRegistroGastos.innerHTML = "";
         let totalAcumulado = 0;
@@ -115,6 +117,7 @@
 
     function filtrarCategoriasSegunTipo() {
         const idGastoBuscado = tipoGastoRegistro.value;
+        const valorDetallePrevio = detalleRegistro.value;
         detalleRegistro.innerHTML = "";
         buscarDetalleTransaccion.value = "";
         cerrarSubFormGastos();
@@ -128,12 +131,13 @@
             return;
         }
 
-        const tipoObjeto = window.apiCache.gasto.find(g => g.idGasto === idGastoBuscado);
+        const tipoObjeto = window.apiCache.gasto.find(g => g.idGasto && g.idGasto.toString().toUpperCase().trim() === idGastoBuscado.toUpperCase().trim());
         const textoNombreGasto = tipoObjeto ? tipoObjeto.nombreGasto.toUpperCase().trim() : "";
 
         const categoriasFiltradas = (window.apiCache.detalleGasto || []).filter(d => {
-            const coincideId = d.idGasto.toUpperCase().trim() === idGastoBuscado.toUpperCase().trim();
-            const coincideNombre = d.idGasto.toUpperCase().trim() === textoNombreGasto; 
+            if (!d.idGasto) return false;
+            const coincideId = d.idGasto.toString().toUpperCase().trim() === idGastoBuscado.toUpperCase().trim();
+            const coincideNombre = d.idGasto.toString().toUpperCase().trim() === textoNombreGasto; 
             return (coincideId || coincideNombre) && d.estado !== "INACTIVO";
         });
 
@@ -142,28 +146,30 @@
         buscarDetalleTransaccion.style.display = "block"; 
 
         btnRapidoAdd.style.display = "block";
-        gestionarVisibilidadBotonesEdicion();
 
         detalleRegistro.innerHTML = `<option value="">-- Seleccione Categoría --</option>`;
         categoriasFiltradas.forEach(c => {
             detalleRegistro.innerHTML += `<option value="${c.idDetalleGasto}">${c.nombreGasto}</option>`;
         });
+
+        detalleRegistro.value = valorDetallePrevio;
+        gestionarVisibilidadBotonesEdicion();
     }
 
     function gestionarVisibilidadBotonesEdicion() {
-        if (detalleRegistro.value) {
-            btnRapidoEdit.style.display = "block";
-            btnRapidoDelete.style.display = "block";
+        if (detalleRegistro && detalleRegistro.value) {
+            if (btnRapidoEdit) btnRapidoEdit.style.display = "block";
+            if (btnRapidoDelete) btnRapidoDelete.style.display = "block";
         } else {
-            btnRapidoEdit.style.display = "none";
-            btnRapidoDelete.style.display = "none";
+            if (btnRapidoEdit) btnRapidoEdit.style.display = "none";
+            if (btnRapidoDelete) btnRapidoDelete.style.display = "none";
         }
     }
 
     function ocultarBotonesCrudRapido() {
-        btnRapidoAdd.style.display = "none";
-        btnRapidoEdit.style.display = "none";
-        btnRapidoDelete.style.display = "none";
+        if (btnRapidoAdd) btnRapidoAdd.style.display = "none";
+        if (btnRapidoEdit) btnRapidoEdit.style.display = "none";
+        if (btnRapidoDelete) btnRapidoDelete.style.display = "none";
     }
 
     function abrirSubFormGastos(esEdicion) {

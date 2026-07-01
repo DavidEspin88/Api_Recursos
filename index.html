@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Gastos - Unificado Premium</title>
+    <title>Gestión de Gastos e Inversiones - Premium</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -31,6 +31,10 @@
                     <span class="menu-icon"><i class="fa-regular fa-credit-card"></i></span>
                     <span class="menu-label">Egresos</span>
                 </a>
+                <a href="#modulo-inversiones" class="menu-item id-nav-inversiones">
+                    <span class="menu-icon"><i class="fa-solid fa-chart-line"></i></span>
+                    <span class="menu-label">Inversiones</span>
+                </a>
                 <div class="theme-toggle-wrapper">
                     <button id="theme-toggle-btn" class="theme-btn" onclick="document.body.classList.toggle('dark-mode')">Compartido 🌓 Alternar Modo</button>
                 </div>
@@ -42,7 +46,7 @@
             <header class="app-header">
                 <div class="header-title-area">
                     <h2>Panel de Control Financiero</h2>
-                    <p class="header-subtitle">Monitoreo de flujos, presupuestos y balances en tiempo real.</p>
+                    <p class="header-subtitle">Monitoreo de flujos, presupuestos, balances e inversiones en tiempo real.</p>
                 </div>
                 <div class="header-actions">
                     <div class="global-period-selector">
@@ -166,19 +170,15 @@
                             </div>
                             <div id="contenedorDetalleRegistro" class="flex-column pos-relative">
                                 <label class="input-label label-dark">Categoría (Detalle)</label>
-                                
                                 <input type="text" id="buscarDetalleTransaccion" placeholder="🔍 Buscar categoría..." class="search-input-hidden" style="display: none;">
-                                
                                 <div class="flex-row gap-6 align-center m-t-5">
                                     <select id="detalleRegistro" disabled class="custom-select bg-disabled">
                                         <option value="">-- Seleccione Tipo primero --</option>
                                     </select>
-                                    
                                     <button id="btnRapidoAdd" type="button" title="Crear nueva categoría" class="btn-action-quick btn-quick-green" style="display: none;"><i class="fa-solid fa-plus"></i></button>
                                     <button id="btnRapidoEdit" type="button" title="Editar categoría seleccionada" class="btn-action-quick btn-quick-orange" style="display: none;"><i class="fa-solid fa-pen-ruler"></i></button>
                                     <button id="btnRapidoDelete" type="button" title="Eliminar categoría seleccionada" class="btn-action-quick btn-quick-red" style="display: none;"><i class="fa-solid fa-trash-can"></i></button>
                                 </div>
-
                                 <div id="subFormCategoriaRapida" class="sub-form-popup-standard standard-modal-effect" style="display: none;">
                                     <div class="modal-pop-header"><i class="fa-solid fa-circle-plus"></i> Nueva Categoría</div>
                                     <input type="hidden" id="rapidoIdDetalle">
@@ -201,7 +201,6 @@
                         <div class="summary-analytics-pane">
                             <div class="analytics-header"><i class="fa-solid fa-chart-line"></i> Resumen de Egresos</div>
                             <div id="resumenGlobal" class="global-summary-box">$0.00</div>
-
                             <div class="analytics-header m-t-20"><i class="fa-regular fa-folder"></i> Distribución por Tipo</div>
                             <div class="table-container compact-table-wrapper">
                                 <table class="premium-table compact">
@@ -217,7 +216,6 @@
                                 </table>
                             </div>
                         </div>
-
                         <div class="history-log-pane">
                             <div class="analytics-header">Historial de Movimientos</div>
                             <div class="table-container log-table-wrapper">
@@ -240,83 +238,140 @@
                     </div>
                 </section>
 
-                <div id="modulo-config" class="config-split-layout full-width visual-hidden">
-                    
-                    <div class="container dashboard-card">
-                        <div class="card-header-premium">
-                            <div class="card-icon bg-config-light">⚙️</div>
-                            <h3>1. Estructura de Tipos de Gasto</h3>
-                        </div>
-                        <div class="form-group-premium">
-                            <input type="hidden" id="editIdGasto"> 
-                            <input type="text" id="nombreGasto" placeholder="Ej: FIJO, VARIABLE, OCASIONAL..." required class="custom-input-text">
-                            <button id="btnGuardar" class="btn-add custom-action-btn">Guardar Tipo</button>
-                        </div>
-
-                        <h4 class="sub-panel-title">Tipos Configurados</h4>
-                        <div class="table-container structured-table">
-                            <table class="premium-table">
-                                <thead>
-                                    <tr>
-                                        <th class="w-30">ID_GASTO</th>
-                                        <th class="w-50">NOMBRE_GASTO</th>
-                                        <th class="w-20 text-center">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablaGastos">
-                                    <tr><td colspan="3" class="text-center table-loader">Sincronizando catálogo maestro...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
+                <section id="modulo-inversiones" class="container max-w-95 m-t-30 dashboard-card full-width">
+                    <div class="card-header-premium">
+                        <div class="card-icon bg-catalog-light"><i class="fa-solid fa-chart-line"></i></div>
+                        <h3>Portafolio y Registro de Inversiones</h3>
                     </div>
 
-                    <div class="container dashboard-card">
-                        <div class="card-header-premium">
-                            <div class="card-icon bg-catalog-light">🗃️</div>
-                            <h3>2. Administrador Unificado de Categorías</h3>
-                        </div>
-                        <div class="card-panel structured-form-panel">
-                            <input type="hidden" id="editIdDetalleGasto"> 
+                    <div class="card-panel white-bg">
+                        <h4 class="card-title-standard">Nueva Colocación de Capital</h4>
+                        <div class="form-grid-auto gap-15 m-b-15">
                             
-                            <div class="form-grid-2">
-                                <div class="input-wrapper flex-1">
-                                    <label class="input-label">Vincular a Tipo de Gasto:</label>
-                                    <select id="selectTipoGastoDetalle" class="custom-select"></select>
+                            <div class="flex-column pos-relative">
+                                <label class="input-label label-dark">Tipo Inversión</label>
+                                <div class="flex-row gap-4 align-center">
+                                    <select id="tipoInversionSelect" class="custom-select flex-1">
+                                        <option value="">-- Seleccione Tipo --</option>
+                                    </select>
+                                    <button id="btnInvTipoAdd" type="button" title="Agregar Tipo" class="btn-icon-add">+</button>
+                                    <button id="btnInvTipoEdit" type="button" title="Editar Tipo" class="btn-icon-edit" style="display: none;">✏️</button>
+                                    <button id="btnInvTipoDelete" type="button" title="Eliminar Tipo" class="btn-icon-delete" style="display: none;">🗑️</button>
                                 </div>
-                                <div class="input-wrapper flex-2">
-                                    <label class="input-label">Nombre de la Categoría:</label>
-                                    <input type="text" id="nombreGastoDetalle" placeholder="Ej: Arriendo, Internet, Gasolina..." required class="custom-input-text">
+                                <div id="subFormInvTipo" class="sub-form-popup standard-modal-effect" style="display: none;">
+                                    <div class="modal-pop-header">⚡ Tipo de Inversión</div>
+                                    <input type="hidden" id="rapidoIdInvTipo">
+                                    <input type="text" id="rapidoInputInvTipo" placeholder="Ej: Plazo Fijo, Acciones..." class="sub-form-input">
+                                    <div class="flex-row gap-6 justify-end">
+                                        <button id="btnInvTipoCancelar" type="button" class="btn-sub-cancel">Cancelar</button>
+                                        <button id="btnInvTipoGuardar" type="button" class="btn-sub-save">Guardar</button>
+                                    </div>
                                 </div>
                             </div>
-                            <button id="btnGuardarDetalle" class="btn-add btn-w-full m-t-10">Crear Categoría</button>
-                        </div>
 
-                        <h4 class="sub-panel-title">Catálogo Completo</h4>
-                        <div class="table-container structured-table">
-                            <table class="premium-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID_DETALLE</th>
-                                        <th>TIPO GASTO</th>
-                                        <th>CATEGORÍA</th>
-                                        <th>ESTADO</th>
-                                        <th class="text-center">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablaDetalles">
-                                    <tr><td colspan="5" class="text-center table-loader">Cargando catálogo...</td></tr>
-                                </tbody>
-                            </table>
+                            <div class="flex-column pos-relative">
+                                <label class="input-label label-dark">Nombre Entidad</label>
+                                <div class="flex-row gap-4 align-center">
+                                    <select id="entidadInversionSelect" class="custom-select flex-1">
+                                        <option value="">-- Seleccione Entidad --</option>
+                                    </select>
+                                    <button id="btnInvEntidadAdd" type="button" title="Agregar Entidad" class="btn-icon-add">+</button>
+                                    <button id="btnInvEntidadEdit" type="button" title="Editar Entidad" class="btn-icon-edit" style="display: none;">✏️</button>
+                                    <button id="btnInvEntidadDelete" type="button" title="Eliminar Entidad" class="btn-icon-delete" style="display: none;">🗑️</button>
+                                </div>
+                                <div id="subFormInvEntidad" class="sub-form-popup standard-modal-effect" style="display: none;">
+                                    <div class="modal-pop-header">🏦 Nombre de Entidad</div>
+                                    <input type="hidden" id="rapidoIdInvEntidad">
+                                    <input type="text" id="rapidoInputInvEntidad" placeholder="Ej: Banco Pichincha, Coop..." class="sub-form-input">
+                                    <div class="flex-row gap-6 justify-end">
+                                        <button id="btnInvEntidadCancelar" type="button" class="btn-sub-cancel">Cancelar</button>
+                                        <button id="btnInvEntidadGuardar" type="button" class="btn-sub-save">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex-column">
+                                <label class="input-label label-dark">Capital ($)</label>
+                                <input type="number" step="0.01" id="invCapital" placeholder="0.00" class="custom-input-number">
+                            </div>
+                            <div class="flex-column">
+                                <label class="input-label label-dark">Interés Anual (%)</label>
+                                <input type="number" step="0.01" id="invInteresAnual" placeholder="0.00" class="custom-input-number">
+                            </div>
+                            <div class="flex-column">
+                                <label class="input-label label-dark">Interés Compuesto ($)</label>
+                                <input type="number" step="0.01" id="invInteresCompuesto" placeholder="0.00" class="custom-input-number">
+                            </div>
+                            <div class="flex-column">
+                                <label class="input-label label-dark">Total a Recibir ($)</label>
+                                <input type="number" step="0.01" id="invTotalRecibir" placeholder="0.00" class="custom-input-number">
+                            </div>
+                            <div class="flex-column">
+                                <label class="input-label label-dark">Interés Ganado ($)</label>
+                                <input type="number" step="0.01" id="invInteresGanado" placeholder="0.00" class="custom-input-number">
+                            </div>
+                            <div class="flex-column">
+                                <label class="input-label label-dark">Fecha Inicio</label>
+                                <input type="date" id="invFechaInicio" class="custom-input-date">
+                            </div>
+                            <div class="flex-column">
+                                <label class="input-label label-dark">Fecha Fin</label>
+                                <input type="date" id="invFechaFin" class="custom-input-date">
+                            </div>
+
                         </div>
+                        <button id="btnRegistrarInversion" class="btn-add btn-w-full" style="background-color: var(--brand-primary) !important;">Registrar Inversión</button>
                     </div>
 
-                </div>
+                    <div class="form-grid-split entries-split-layout m-t-20">
+                        <div class="summary-analytics-pane">
+                            <div class="analytics-header"><i class="fa-solid fa-pie-chart"></i> Resumen por Tipo de Inversión</div>
+                            <div class="table-container compact-table-wrapper" style="margin-top:15px;">
+                                <table class="premium-table compact">
+                                    <thead>
+                                        <tr>
+                                            <th>Tipo</th>
+                                            <th class="text-right">Capital</th>
+                                            <th class="text-right">Int. Compuesto</th>
+                                            <th class="text-right">Total Recibir</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="resumenInversionesCuerpo">
+                                        <tr><td colspan="4" class="text-center data-empty-msg">Sin datos computados.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="history-log-pane">
+                            <div class="analytics-header"><i class="fa-solid fa-list"></i> Historial de Inversiones</div>
+                            <div class="table-container log-table-wrapper" style="margin-top:15px;">
+                                <table class="premium-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Entidad</th>
+                                            <th>Tipo</th>
+                                            <th class="text-right">Capital</th>
+                                            <th class="text-right">Total Recibir</th>
+                                            <th>Vencimiento</th>
+                                            <th class="text-center">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaInversionesCuerpo">
+                                        <tr><td colspan="6" class="text-center table-loader">Cargando base de datos de inversiones...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div id="modulo-config" class="config-split-layout full-width visual-hidden"></div>
 
             </div>
         </main>
     </div>
 
-    <!-- MODAL RESUMEN DE CUENTAS -->
     <div id="modalResumen" class="modal-overlay" style="display: none;">
         <div class="modal-container">
             <div class="modal-header">
@@ -346,5 +401,6 @@
     <script src="detalle.js"></script>
     <script src="registro.js"></script>
     <script src="ingresos.js"></script>
+    <script src="inversiones.js"></script>
 </body>
 </html>

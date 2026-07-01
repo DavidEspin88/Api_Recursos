@@ -38,36 +38,46 @@ window.formatearMoneda = function(valor) {
 
     // Escuchas de eventos principales del ciclo de vida
     document.addEventListener("DOMContentLoaded", cargarDatosCentral);
-    btnGuardar.addEventListener("click", guardarRegistroTipo);
+    if (btnGuardar) {
+        btnGuardar.addEventListener("click", guardarRegistroTipo);
+    }
 
     // Exponer la función de carga centralizada
     window.cargarDatosCentral = cargarDatosCentral;
 
     // --- MANEJO DEL MODAL ---
-    btnResumen.addEventListener("click", () => {
-        modalResumen.style.display = "flex";
-        const hoy = new Date();
-        const anio = hoy.getFullYear();
-        const mes = String(hoy.getMonth() + 1).padStart(2, '0');
-        const dia = String(hoy.getDate()).padStart(2, '0');
-        const fechaActual = `${anio}-${mes}-${dia}`;
-        const primerDia = `${anio}-${mes}-01`;
-        fechaInicio.value = primerDia;
-        fechaFin.value = fechaActual;
-        contenidoResumen.innerHTML = `<p class="text-muted">Seleccione un rango de fechas y presione "Generar Resumen".</p>`;
-    });
+    if (btnResumen) {
+        btnResumen.addEventListener("click", () => {
+            modalResumen.style.display = "flex";
+            const hoy = new Date();
+            const anio = hoy.getFullYear();
+            const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+            const dia = String(hoy.getDate()).padStart(2, '0');
+            const fechaActual = `${anio}-${mes}-${dia}`;
+            const primerDia = `${anio}-${mes}-01`;
+            fechaInicio.value = primerDia;
+            fechaFin.value = fechaActual;
+            contenidoResumen.innerHTML = `<p class="text-muted">Seleccione un rango de fechas y presione "Generar Resumen".</p>`;
+        });
+    }
 
-    btnCerrarModal.addEventListener("click", cerrarModal);
-    modalResumen.addEventListener("click", (e) => {
-        if (e.target === modalResumen) cerrarModal();
-    });
+    if (btnCerrarModal) {
+        btnCerrarModal.addEventListener("click", cerrarModal);
+    }
+    if (modalResumen) {
+        modalResumen.addEventListener("click", (e) => {
+            if (e.target === modalResumen) cerrarModal();
+        });
+    }
 
     function cerrarModal() {
-        modalResumen.style.display = "none";
+        if (modalResumen) modalResumen.style.display = "none";
     }
 
     // --- GENERAR RESUMEN (AGRUPACIÓN AGREGADA) ---
-    btnGenerar.addEventListener("click", generarResumen);
+    if (btnGenerar) {
+        btnGenerar.addEventListener("click", generarResumen);
+    }
 
     function generarResumen() {
         const inicio = fechaInicio.value;
@@ -176,12 +186,14 @@ window.formatearMoneda = function(valor) {
                 window.apiCache.detalleGasto = data.detalleGasto || [];
                 window.apiCache.registroGasto = data.registroGasto || [];
                 window.apiCache.ingresos = data.ingresos || [];
+                window.apiCache.inversiones = data.inversiones || [];
 
                 renderizarTablaTipos();
 
                 if (typeof window.renderizarModuloDetalles === "function") window.renderizarModuloDetalles();
                 if (typeof window.renderizarModuloRegistroGastos === "function") window.renderizarModuloRegistroGastos();
                 if (typeof window.renderizarModuloIngresos === "function") window.renderizarModuloIngresos();
+                if (typeof window.renderizarModuloInversiones === "function") window.renderizarModuloInversiones();
 
                 if (window.apiCache._anioActual !== anioSelect) {
                     window.apiCache._anioActual = anioSelect;
@@ -201,7 +213,7 @@ window.formatearMoneda = function(valor) {
         fetch(urlCompleta)
             .then(res => res.json())
             .then(data => {
-                window.apiCache.registroGastoAnual = data.registroGastoAnual || [];
+                window.apiCache.registroGastoAnual = data.registroGasto || [];
                 if (callback) {
                     callback();
                 } else if (typeof window.renderizarModuloIngresos === "function") {
@@ -292,7 +304,7 @@ window.formatearMoneda = function(valor) {
                 alert("Error de procesamiento: " + result.message);
             }
         })
-        .catch(err => console.error("Error en la operación del tipo de gasto:", err))
+        .catch(err => console.error("Error en la operation del tipo de gasto:", err))
         .finally(() => btnGuardar.disabled = false);
     }
 
@@ -315,18 +327,24 @@ window.formatearMoneda = function(valor) {
     }
 
     function prepararEdicionTipo(id, nombre) {
-        inputIdOculto.value = id;
-        inputNombre.value = nombre;
-        btnGuardar.textContent = "Actualizar Tipo";
-        btnGuardar.className = "btn-edit-mode";
-        inputNombre.focus();
+        if (inputIdOculto) inputIdOculto.value = id;
+        if (inputNombre) {
+            inputNombre.value = nombre;
+            inputNombre.focus();
+        }
+        if (btnGuardar) {
+            btnGuardar.textContent = "Actualizar Tipo";
+            btnGuardar.className = "btn-edit-mode";
+        }
     }
 
     function restablecerFormularioTipo() {
-        inputIdOculto.value = "";
-        inputNombre.value = "";
-        btnGuardar.textContent = "Guardar Tipo";
-        btnGuardar.className = "btn-add";
+        if (inputIdOculto) inputIdOculto.value = "";
+        if (inputNombre) inputNombre.value = "";
+        if (btnGuardar) {
+            btnGuardar.textContent = "Guardar Tipo";
+            btnGuardar.className = "btn-add";
+        }
     }
 
     window.calcularAhorroHasta = calcularAhorroHasta;
