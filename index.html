@@ -23,16 +23,16 @@
                 </div>
             </div>
             <nav class="sidebar-menu">
-                <a href="#modulo-ingresos" class="menu-item active">
-                    <span class="menu-icon"><span><i class="fa-solid fa-sack-dollar"></i></span></span>
+                <a href="#modulo-ingresos" class="menu-item active id-nav-ingresos">
+                    <span class="menu-icon"><i class="fa-solid fa-sack-dollar"></i></span>
                     <span class="menu-label">Ingresos</span>
                 </a>
-                <a href="#modulo-gastos" class="menu-item">
-                    <span class="menu-icon"><span><i class="fa-regular fa-credit-card"></i></span></span>
+                <a href="#modulo-gastos" class="menu-item id-nav-gastos">
+                    <span class="menu-icon"><i class="fa-regular fa-credit-card"></i></span>
                     <span class="menu-label">Egresos</span>
                 </a>
                 <div class="theme-toggle-wrapper">
-                    <button id="theme-toggle-btn" class="theme-btn" onclick="document.body.classList.toggle('dark-mode')">🌓 Alternar Modo</button>
+                    <button id="theme-toggle-btn" class="theme-btn" onclick="document.body.classList.toggle('dark-mode')">Compartido 🌓 Alternar Modo</button>
                 </div>
             </nav>
         </aside>
@@ -44,9 +44,14 @@
                     <h2>Panel de Control Financiero</h2>
                     <p class="header-subtitle">Monitoreo de flujos, presupuestos y balances en tiempo real.</p>
                 </div>
-                <div class="global-period-selector">
-                    <span class="filter-label"><span><i class="fa-thin fa-calendar-lines"></i></span> Periodo Contable:</span>
-                    <input type="month" id="filtroMesAnioIngreso" value="2026-01" class="input-month">
+                <div class="header-actions">
+                    <div class="global-period-selector">
+                        <span class="filter-label"><i class="fa-solid fa-calendar-days"></i> Periodo Contable:</span>
+                        <input type="month" id="filtroMesAnioIngreso" value="2026-01" class="input-month">
+                    </div>
+                    <button id="btnResumenCuentas" class="btn-add" style="background-color: var(--brand-primary); color: white; border: none; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-chart-pie"></i> Resumen de Cuentas
+                    </button>
                 </div>
             </header>
 
@@ -54,7 +59,7 @@
                 
                 <section id="modulo-ingresos" class="container container-income dashboard-card full-width">
                     <div class="card-header-premium">
-                        <div class="card-icon bg-income-light"><span><i class="fa-solid fa-sack-dollar"></i></span></div>
+                        <div class="card-icon bg-income-light"><i class="fa-solid fa-sack-dollar"></i></div>
                         <h3>Gestión de Ingresos Mensuales</h3>
                     </div>
                     
@@ -98,17 +103,24 @@
 
                     <div class="kpi-container form-grid-2 gap-15 m-t-15 m-b-15">
                         <div class="summary-card kpi-card-income">
-                            <div class="kpi-icon"><span><i class="fa-solid fa-chart-line"></i></span></div>
+                            <div class="kpi-icon"><i class="fa-solid fa-chart-line"></i></div>
                             <div class="kpi-data">
                                 <span class="summary-title">Total Ingresos</span>
                                 <span id="totalMontoIngresos" class="summary-value color-income">$0.00</span>
                             </div>
                         </div>
                         <div class="summary-card kpi-card-balance">
-                            <div class="kpi-icon"><span><i class="fa-solid fa-scale-balanced"></i></span></div>
+                            <div class="kpi-icon"><i class="fa-solid fa-scale-balanced"></i></div>
                             <div class="kpi-data">
                                 <span class="summary-title">Saldo del Mes</span>
                                 <span id="balanceNetoMensual" class="summary-value color-balance">$0.00</span>
+                            </div>
+                        </div>
+                        <div class="summary-card kpi-card-ahorro">
+                            <div class="kpi-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                            <div class="kpi-data">
+                                <span class="summary-title">Ahorro del Mes</span>
+                                <span id="ahorroMes" class="summary-value color-ahorro">$0.00</span>
                             </div>
                         </div>
                     </div>
@@ -135,7 +147,7 @@
 
                 <section id="modulo-gastos" class="container max-w-95 m-t-30 dashboard-card full-width">
                     <div class="card-header-premium">
-                        <div class="card-icon bg-expense-light"><span><i class="fa-regular fa-credit-card"></i></span></div>
+                        <div class="card-icon bg-expense-light"><i class="fa-regular fa-credit-card"></i></div>
                         <h3>Transacciones y Registro de Gastos</h3>
                     </div>
                     
@@ -162,13 +174,13 @@
                                         <option value="">-- Seleccione Tipo primero --</option>
                                     </select>
                                     
-                                    <button id="btnRapidoAdd" type="button" title="Crear nueva categoría" class="btn-action-quick btn-quick-green" style="display: none;"><span><i class="fa-solid fa-plus"></i></span></button>
-                                    <button id="btnRapidoEdit" type="button" title="Editar categoría seleccionada" class="btn-action-quick btn-quick-orange" style="display: none;"><span><i class="fa-solid fa-pen-ruler"></i></span></button>
+                                    <button id="btnRapidoAdd" type="button" title="Crear nueva categoría" class="btn-action-quick btn-quick-green" style="display: none;"><i class="fa-solid fa-plus"></i></button>
+                                    <button id="btnRapidoEdit" type="button" title="Editar categoría seleccionada" class="btn-action-quick btn-quick-orange" style="display: none;"><i class="fa-solid fa-pen-ruler"></i></button>
                                     <button id="btnRapidoDelete" type="button" title="Eliminar categoría seleccionada" class="btn-action-quick btn-quick-red" style="display: none;"><i class="fa-solid fa-trash-can"></i></button>
                                 </div>
 
                                 <div id="subFormCategoriaRapida" class="sub-form-popup-standard standard-modal-effect" style="display: none;">
-                                    <div class="modal-pop-header"><span><i class="fa-solid fa-circle-plus"></i></span> Nueva Categoría</div>
+                                    <div class="modal-pop-header"><i class="fa-solid fa-circle-plus"></i> Nueva Categoría</div>
                                     <input type="hidden" id="rapidoIdDetalle">
                                     <input type="text" id="rapidoInputNombre" placeholder="Nombre de la nueva categoría..." class="sub-form-input-full">
                                     <div class="flex-row gap-6 justify-end">
@@ -187,12 +199,10 @@
 
                     <div class="form-grid-split entries-split-layout">
                         <div class="summary-analytics-pane">
-                            <div class="analytics-header"><span><i class="fa-solid fa-chart-line"></i></span> Resumen de Egresos</div>
-                            <div id="resumenGlobal" class="global-summary-box">
-                                $0.00
-                            </div>
+                            <div class="analytics-header"><i class="fa-solid fa-chart-line"></i> Resumen de Egresos</div>
+                            <div id="resumenGlobal" class="global-summary-box">$0.00</div>
 
-                            <div class="analytics-header m-t-20"><span><i class="fa-regular fa-folder"></i></span> Distribución por Tipo</div>
+                            <div class="analytics-header m-t-20"><i class="fa-regular fa-folder"></i> Distribución por Tipo</div>
                             <div class="table-container compact-table-wrapper">
                                 <table class="premium-table compact">
                                     <thead>
@@ -306,8 +316,31 @@
         </main>
     </div>
 
-    <select id="filtroGlobalAnio" class="visual-hidden"><option value="2026">2026</option></select>
-    <select id="filtroGlobalMes" class="visual-hidden"><option value="ENERO">ENERO</option></select>
+    <!-- MODAL RESUMEN DE CUENTAS -->
+    <div id="modalResumen" class="modal-overlay" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-chart-pie"></i> Resumen de Cuentas</h2>
+                <button class="modal-close" id="btnCerrarModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-filtros">
+                    <div class="flex-column">
+                        <label class="input-label">Fecha Inicio</label>
+                        <input type="date" id="fechaInicioResumen" class="custom-input-date">
+                    </div>
+                    <div class="flex-column">
+                        <label class="input-label">Fecha Final</label>
+                        <input type="date" id="fechaFinResumen" class="custom-input-date">
+                    </div>
+                    <button id="btnGenerarResumen" class="btn-add" style="background-color: var(--brand-primary); color: white; border: none; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; margin-top: 20px;">Generar Resumen</button>
+                </div>
+                <div id="contenidoResumen" class="contenido-resumen">
+                    <p class="text-muted">Seleccione un rango de fechas y presione "Generar Resumen".</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
     <script src="detalle.js"></script>

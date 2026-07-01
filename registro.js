@@ -33,17 +33,15 @@
     btnRapidoCancelar.addEventListener("click", cerrarSubFormGastos);
     btnRapidoGuardar.addEventListener("click", ejecutarGuardadoRapidoCategoria);
 
-    // Exponer función de renderizado de forma global para la sincronización con script.js
+    // Exponer función de renderizado de forma global
     window.renderizarModuloRegistroGastos = function() {
         const data = window.apiCache;
 
-        // Captura coordinada de periodos desde el componente maestro de sincronización
         const filtroMesAnio = document.getElementById("filtroMesAnioIngreso").value;
         const partesFiltro = filtroMesAnio.split("-");
         const anioFiltroNum = parseInt(partesFiltro[0], 10);
         const mesFiltroNum = parseInt(partesFiltro[1], 10);
 
-        // Actualizar opciones del selector de Tipo de Gasto
         const valorSeleccionado = tipoGastoRegistro.value;
         tipoGastoRegistro.innerHTML = `<option value="">-- Seleccione --</option>`;
         (data.gasto || []).forEach(g => {
@@ -57,7 +55,6 @@
 
         const todosLosRegistros = data.registroGasto || [];
         
-        // FILTRADO DE PERIODOS: Validación estricta con coincidencia multiformato de fechas (ISO / Standard)
         const registrosFiltrados = todosLosRegistros.filter(g => {
             if (!g.fecha) return false;
             const partesGasto = g.fecha.split(/[-/]/);
@@ -90,7 +87,7 @@
                     <td>${r.fecha}</td>
                     <td><span class="badge-tipo">${r.nombreGasto}</span></td>
                     <td>${r.detalleGasto}</td>
-                    <td class="text-right" style="font-weight:bold;">$${valorMonto.toFixed(2)}</td>
+                    <td class="text-right" style="font-weight:bold;">$ ${window.formatearMoneda(valorMonto)}</td>
                     <td class="text-center"></td>
                 `;
 
@@ -104,15 +101,14 @@
             });
         }
 
-        // Renderizado del bloque sumatorio global
-        resumenGlobal.textContent = `$${totalAcumulado.toFixed(2)}`;
+        resumenGlobal.textContent = `$ ${window.formatearMoneda(totalAcumulado)}`;
         resumenPorTipo.innerHTML = "";
         
         if (Object.keys(totalesPorTipo).length === 0) {
             resumenPorTipo.innerHTML = `<tr><td colspan="2" class="text-center">Sin cómputos acumulados.</td></tr>`;
         } else {
             for (let t in totalesPorTipo) {
-                resumenPorTipo.innerHTML += `<tr><td><strong>${t}</strong></td><td class="text-right" style="color:#2c3e50; font-weight:bold;">$${totalesPorTipo[t].toFixed(2)}</td></tr>`;
+                resumenPorTipo.innerHTML += `<tr><td><strong>${t}</strong></td><td class="text-right" style="color:#2c3e50; font-weight:bold;">$ ${window.formatearMoneda(totalesPorTipo[t])}</td></tr>`;
             }
         }
     };
@@ -261,13 +257,13 @@
             return alert("Por favor complete todos los campos transaccionales.");
         }
 
-        const tipoObjeto = window.apiCache.gasto.find(g => g.idGasto === tipoGasto);
+        const tipoObjeto = window.apiCache.gasto.find(g => g.idGasto.toUpperCase().trim() === tipoGasto.toUpperCase().trim());
         const payload = {
             target: "registro_gasto",
             action: "create",
             fecha: fecha,
             idGasto: tipoGasto,
-            nombreGasto: tipoObjeto ? tipoObjeto.nombreGasto : "",
+            nombreGasto: tipoObjeto ? tipoObjeto.nombreGasto : (tipoGastoRegistro.options[tipoGastoRegistro.selectedIndex].text || ""),
             detalleGasto: detalleTexto,
             monto: monto
         };
@@ -308,6 +304,5 @@
         });
     }
     
-    // Inyección explícita del handler en el scope global de la ventana
     window.eliminarTransaccionGasto = eliminarTransaccionGasto;
 })();

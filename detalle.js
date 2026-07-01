@@ -1,18 +1,18 @@
 (() => {
-    // Captura de elementos del DOM del Administrador Unificado de Categorías
     const tablaDetalles = document.getElementById("tablaDetalles");
     const selectTipoGastoDetalle = document.getElementById("selectTipoGastoDetalle");
     const inputNombre = document.getElementById("nombreGastoDetalle");
     const inputIdOculto = document.getElementById("editIdDetalleGasto");
     const btnGuardar = document.getElementById("btnGuardarDetalle");
 
-    btnGuardar.addEventListener("click", guardarCategoriaDetalle);
+    if (btnGuardar) {
+        btnGuardar.addEventListener("click", guardarCategoriaDetalle);
+    }
 
-    // Exponer el módulo de renderizado de forma global para la reactividad de script.js
     window.renderizarModuloDetalles = function() {
         const data = window.apiCache;
+        if (!selectTipoGastoDetalle || !tablaDetalles) return;
         
-        // 1. Sincronizar selectores de tipos de gasto en el formulario de la sección 2
         const valorDetalleSelectActual = selectTipoGastoDetalle.value;
         selectTipoGastoDetalle.innerHTML = `<option value="">-- Seleccionar Tipo --</option>`;
         (data.gasto || []).forEach(g => {
@@ -20,7 +20,6 @@
         });
         selectTipoGastoDetalle.value = valorDetalleSelectActual;
 
-        // 2. Pintar la tabla del Catálogo de Categorías
         tablaDetalles.innerHTML = "";
         const listaCategorias = data.detalleGasto || [];
 
@@ -51,13 +50,11 @@
             const celdaAcciones = document.createElement("td");
             celdaAcciones.className = "text-center";
 
-            // Botón Editar de Categoría
             const btnEditar = document.createElement("button");
             btnEditar.textContent = "Editar";
             btnEditar.className = "btn-action-edit";
             btnEditar.addEventListener("click", () => prepararEdicionCategoria(item));
 
-            // Botón Eliminar de Categoría
             const btnEliminar = document.createElement("button");
             btnEliminar.textContent = "Eliminar";
             btnEliminar.className = "btn-action-delete";

@@ -3,22 +3,17 @@
    Soporte Nativo: Modo Claro, Modo Oscuro y Adaptabilidad Móvil Completa
    ========================================================================== */
 
-/* Variables Globales / Tokens de Diseño (Light Mode por Defecto) */
 :root {
     --font-primary: 'Inter', system-ui, -apple-system, sans-serif;
 
     /* Paleta de Colores Semánticos */
     --brand-primary: #3182ce;
-    /* Azul Premium */
     --brand-primary-hover: #2b6cb0;
     --brand-success: #2f855a;
-    /* Verde Ingresos */
     --brand-success-hover: #22543d;
     --brand-warning: #dd6b20;
-    /* Naranja Alerta */
     --brand-warning-hover: #9c4221;
     --brand-danger: #e53e3e;
-    /* Rojo Egresos */
     --brand-danger-hover: #9b2c2c;
 
     /* Fondos y Superficies */
@@ -45,7 +40,6 @@
     --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Tokens para Modo Oscuro (Activación mediante clase .dark-mode) */
 body.dark-mode {
     --bg-app: #0f172a;
     --bg-sidebar: #1e293b;
@@ -61,7 +55,6 @@ body.dark-mode {
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 }
 
-/* Resets Esenciales y Estilos Base */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -82,16 +75,12 @@ body {
     line-height: 1.5;
 }
 
-/* ==========================================================================
-   ARQUITECTURA DE CONTENEDORES (APP SHELL LAYOUT)
-   ========================================================================== */
 .app-layout {
     display: grid;
     grid-template-columns: 260px 1fr;
     min-height: 100vh;
 }
 
-/* Sidebar Estilo SaaS Moderno */
 .app-sidebar {
     background-color: var(--bg-sidebar);
     border-right: 1px solid var(--border-color);
@@ -186,7 +175,6 @@ body {
     transition: var(--transition-smooth);
 }
 
-/* Área de Contenido Principal */
 .app-main-content {
     padding: 40px;
     max-width: 1400px;
@@ -197,7 +185,6 @@ body {
     gap: 32px;
 }
 
-/* Header de la Aplicación */
 .app-header {
     display: flex;
     justify-content: space-between;
@@ -221,7 +208,13 @@ body {
     margin-top: 4px;
 }
 
-/* Selector del Periodo Contable Globalizado */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
 .global-period-selector {
     display: flex;
     align-items: center;
@@ -256,18 +249,12 @@ body {
     box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
 }
 
-/* Dashboard Grid Layout System */
 .dashboard-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 32px;
 }
 
-/* ==========================================================================
-   COMPONENTES CORE REDISEÑADOS (CARDS, FORMS, TABLES)
-   ========================================================================== */
-
-/* Tarjeta Contenedora Principal (Dashboard Card) */
 .dashboard-card {
     background-color: var(--bg-surface);
     border-radius: var(--radius-lg);
@@ -320,7 +307,6 @@ body {
     color: var(--text-main);
 }
 
-/* Modificadores y Compatibilidad Forzada de Secciones (.container) */
 .container {
     max-width: 100% !important;
     margin: 0 !important;
@@ -330,7 +316,6 @@ body {
     border-radius: 0 !important;
 }
 
-/* Paneles de Formulario Interiores */
 .card-panel,
 .card-panel-dashed {
     background-color: var(--bg-surface-alt);
@@ -354,7 +339,6 @@ body {
     font-weight: 700;
 }
 
-/* Elementos de Entrada (Inputs y Selects Premium) */
 .form-grid-auto {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -400,14 +384,12 @@ body {
     box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
 }
 
-/* Inputs Deshabilitados */
 .bg-disabled {
     background-color: var(--bg-app) !important;
     color: var(--text-muted) !important;
     cursor: not-allowed;
 }
 
-/* Botonería Estilo Comercial de Alta Fidelidad */
 button,
 .btn-add {
     padding: 12px 24px;
@@ -429,7 +411,6 @@ button:active,
     transform: scale(0.98);
 }
 
-/* Variaciones de Botones */
 .btn-add,
 .btn-income-submit {
     background-color: var(--brand-success) !important;
@@ -443,7 +424,6 @@ button:active,
 
 .btn-expense-submit {
     background-color: #6b46c1 !important;
-    /* Púrpura elegante para gastos */
     color: white !important;
     width: 100%;
 }
@@ -465,7 +445,6 @@ button:active,
     width: 100% !important;
 }
 
-/* Botones Icono del Control Crud Rápido */
 .btn-icon-add,
 .btn-action-quick {
     padding: 12px 14px !important;
@@ -491,7 +470,6 @@ button:active,
     color: white !important;
 }
 
-/* Botones de Tabla (Acciones de Fila) */
 .btn-action-edit {
     background-color: rgba(236, 201, 75, 0.15) !important;
     color: #744210 !important;
@@ -522,9 +500,6 @@ body.dark-mode .btn-action-edit {
     color: white !important;
 }
 
-/* ==========================================================================
-   KPI CARDS / COMPONENTES ANALÍTICOS METRICAS
-   ========================================================================== */
 .kpi-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -580,7 +555,10 @@ body.dark-mode .btn-action-edit {
     color: var(--brand-primary) !important;
 }
 
-/* Bloque Sumatorio Global de Egresos */
+.color-ahorro {
+    color: #d69e2e !important;
+}
+
 .global-summary-box {
     font-size: 32px !important;
     font-weight: 800 !important;
@@ -596,12 +574,8 @@ body.dark-mode .btn-action-edit {
 
 body.dark-mode .global-summary-box {
     color: #b7791f !important;
-    /* Ambar dorado en modo oscuro para contraste */
 }
 
-/* ==========================================================================
-   SISTEMA DE TABLAS PREMIUM
-   ========================================================================== */
 .table-container {
     overflow-x: auto;
     width: 100%;
@@ -635,8 +609,6 @@ body.dark-mode .global-summary-box {
     border-bottom: 1px solid var(--border-color);
     color: var(--text-main);
     background-color: var(--bg-surface);
-    border-right: none !important;
-    border-left: none !important;
 }
 
 .premium-table tr:last-child td {
@@ -647,12 +619,6 @@ body.dark-mode .global-summary-box {
     background-color: var(--bg-surface-alt) !important;
 }
 
-/* Reajuste de especificidades de estilos inline forzados desde JavaScript */
-.premium-table td[style*="font-weight:bold"] {
-    font-weight: 700 !important;
-}
-
-/* Badges de Estado e Identificadores */
 .badge-tipo,
 .badge-gasto {
     background-color: rgba(49, 130, 206, 0.12) !important;
@@ -666,7 +632,6 @@ body.dark-mode .global-summary-box {
     display: inline-block;
 }
 
-/* Estado Vacío o Mensajes de Carga */
 .table-loader,
 .data-empty-msg {
     padding: 30px !important;
@@ -674,9 +639,6 @@ body.dark-mode .global-summary-box {
     font-style: italic;
 }
 
-/* ==========================================================================
-   SUBFORMULARIOS INTERACTIVOS (MODALES FLOTANTES)
-   ========================================================================== */
 .sub-form-popup,
 .sub-form-popup-standard {
     position: absolute;
@@ -690,7 +652,6 @@ body.dark-mode .global-summary-box {
     padding: 20px !important;
     z-index: 200 !important;
     margin-top: 8px !important;
-    backdrop-filter: blur(8px);
 }
 
 .modal-pop-header {
@@ -727,7 +688,6 @@ body.dark-mode .global-summary-box {
     color: white !important;
 }
 
-/* Selector de Categorías de Búsqueda Ocultable Dinámicamente */
 .search-input-hidden {
     padding: 10px 14px !important;
     border-radius: var(--radius-sm) !important;
@@ -740,9 +700,6 @@ body.dark-mode .global-summary-box {
     margin-bottom: 8px !important;
 }
 
-/* ==========================================================================
-   GRID LAYOUT SPLITS AVANZADOS Y UTILERÍAS
-   ========================================================================== */
 .form-grid-split {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -774,7 +731,6 @@ body.dark-mode .global-summary-box {
     white-space: nowrap;
 }
 
-/* Clases Utilitarias (Invariabilidad del Core) */
 .visual-hidden {
     display: none !important;
 }
@@ -829,7 +785,6 @@ body.dark-mode .global-summary-box {
 
 .flex-row {
     display: flex !important;
-    flex-direction: row !important;
 }
 
 .flex-column {
@@ -837,7 +792,6 @@ body.dark-mode .global-summary-box {
     flex-direction: column !important;
 }
 
-/* Microinteracciones y Animaciones Fluidas */
 .standard-modal-effect {
     animation: animeModal 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -847,39 +801,29 @@ body.dark-mode .global-summary-box {
         opacity: 0;
         transform: translateY(10px) scale(0.98);
     }
-
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
     }
 }
 
-/* ==========================================================================
-   SISTEMA RESPONSIVE MULTICAPA (MÓVIL A ESCRITORIO ULTRA-WIDE)
-   ========================================================================== */
-
-/* Pantallas de Escritorio Medianas / Laptops (Hasta 1024px) */
 @media (max-width: 1024px) {
     .app-layout {
         grid-template-columns: 220px 1fr;
     }
-
     .app-main-content {
         padding: 24px;
     }
-
     .form-grid-split,
     .config-split-layout {
         grid-template-columns: 1fr;
     }
 }
 
-/* Dispositivos Tablets (Hasta 768px) */
 @media (max-width: 768px) {
     .app-layout {
         grid-template-columns: 1fr;
     }
-
     .app-sidebar {
         height: auto;
         position: relative;
@@ -887,30 +831,30 @@ body.dark-mode .global-summary-box {
         border-bottom: 1px solid var(--border-color);
         padding: 20px;
     }
-
     .sidebar-menu {
         flex-direction: row;
         flex-wrap: wrap;
     }
-
     .theme-toggle-wrapper {
         margin-top: 0;
         padding-top: 0;
         border-top: none;
     }
-
     .app-header {
         flex-direction: column;
         align-items: flex-start;
     }
-
     .global-period-selector {
         width: 100%;
         justify-content: space-between;
     }
+    .header-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
 
-/* Dispositivos Móviles Avanzados / Smartphones (320px a 425px) */
 @media (max-width: 425px) {
     .app-sidebar {
         position: fixed;
@@ -924,18 +868,14 @@ body.dark-mode .global-summary-box {
         z-index: 1000;
         border-top: 1px solid var(--border-color);
     }
-
     .sidebar-brand {
         display: none;
-        /* Ocultar branding en móvil para optimizar Viewport inferior */
     }
-
     .sidebar-menu {
         width: 100%;
         justify-content: space-around;
         gap: 0;
     }
-
     .menu-item {
         flex-direction: column;
         gap: 4px;
@@ -944,63 +884,47 @@ body.dark-mode .global-summary-box {
         flex: 1;
         text-align: center;
     }
-
-    .menu-icon {
-        font-size: 18px;
-    }
-
     .theme-toggle-wrapper {
         display: none;
-        /* Desactivado en layout compacto móvil para prevenir obstrucciones */
     }
-
     .app-main-content {
         padding: 16px;
         padding-bottom: 100px;
-        /* Margen de seguridad para no colisionar con Bottom Nav */
     }
-
     .dashboard-card {
         padding: 16px;
     }
-
     .form-grid-auto {
         grid-template-columns: 1fr;
     }
-
     .form-group-premium {
         flex-direction: column;
     }
-
     .custom-action-btn {
         width: 100%;
     }
-
     .premium-table th,
     .premium-table td {
         padding: 10px 12px;
         font-size: 12px;
     }
+    .kpi-container {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ==========================================================================
-   SISTEMA DE ENMASCARAMIENTO Y AISLAMIENTO DE VISTAS (MUTUAMENTE EXCLUSIVAS)
+   SISTEMA DE ENMASCARAMIENTO Y AISLAMIENTO DE VISTAS MUTUAMENTE EXCLUSIVAS
    ========================================================================== */
-
-/* 1. Estado Base: Ocultación absoluta e inapelable de ambas secciones */
 #modulo-ingresos,
 #modulo-gastos {
     display: none !important;
 }
 
-/* 2. Regla de Apertura por Defecto: 
-      Si la URL no tiene ningún marcador (#), mostramos ÚNICAMENTE Ingresos */
 body:not(:has(#modulo-ingresos:target)):not(:has(#modulo-gastos:target)) #modulo-ingresos {
     display: block !important;
 }
 
-/* 3. Regla de Activación por Target:
-      Se muestra la sección correspondiente SÓLO cuando es el blanco activo de la URL */
 #modulo-ingresos:target {
     display: block !important;
     animation: switchView 0.25s ease-out forwards;
@@ -1011,50 +935,37 @@ body:not(:has(#modulo-ingresos:target)):not(:has(#modulo-gastos:target)) #modulo
     animation: switchView 0.25s ease-out forwards;
 }
 
-/* Animación Premium de transición de pantalla */
 @keyframes switchView {
-    from { 
-        opacity: 0; 
-        transform: translateY(8px); 
+    from {
+        opacity: 0;
+        transform: translateY(8px);
     }
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-/* ==========================================================================
-   SINCRONIZACIÓN VISUAL DEL MENÚ (SIDEBAR HIGHLIGHT)
-   ========================================================================== */
-
-/* Iluminar "Ingresos" por defecto o cuando su target esté activo */
-body:not(:has(#modulo-gastos:target)) .nav-ingresos,
-#modulo-ingresos:target ~ .app-layout .nav-ingresos, /* Compatibilidad de rutas */
-body:has(#modulo-ingresos:target) .nav-ingresos {
+body:not(:has(#modulo-gastos:target)) .id-nav-ingresos,
+body:has(#modulo-ingresos:target) .id-nav-ingresos {
     background-color: rgba(49, 130, 206, 0.1) !important;
     color: var(--brand-primary) !important;
     font-weight: 600 !important;
 }
 
-/* Iluminar "Transacciones" únicamente cuando su target esté activo */
-body:has(#modulo-gastos:target) .nav-gastos {
+body:has(#modulo-gastos:target) .id-nav-gastos {
     background-color: rgba(49, 130, 206, 0.1) !important;
     color: var(--brand-primary) !important;
     font-weight: 600 !important;
 }
 
-/* Apagar el botón de "Ingresos" cuando estemos en "Gastos" */
-body:has(#modulo-gastos:target) .nav-ingresos {
+body:has(#modulo-gastos:target) .id-nav-ingresos {
     background-color: transparent !important;
     color: var(--text-muted) !important;
     font-weight: 500 !important;
 }
-/* ==========================================================================
-   OPTIMIZACIÓN CRÍTICA PARA MOBILES (PREVENCION DE DESBORDE EN TABLAS)
-   ========================================================================== */
 
 @media (max-width: 425px) {
-    /* 1. Forzar a los contenedores grid a no expandirse más allá del viewport */
     .dashboard-grid,
     .form-grid-split,
     .entries-split-layout,
@@ -1065,8 +976,6 @@ body:has(#modulo-gastos:target) .nav-ingresos {
         min-width: 0 !important;
         overflow: hidden !important;
     }
-
-    /* 2. Asegurar aislamiento de las tarjetas de los paneles */
     .summary-analytics-pane,
     .history-log-pane,
     .table-card-wrapper {
@@ -1074,66 +983,174 @@ body:has(#modulo-gastos:target) .nav-ingresos {
         min-width: 0 !important;
         overflow: hidden !important;
     }
-
-    /* 3. Ajuste estricto al contenedor de la tabla */
     .table-container {
         width: 100% !important;
         max-width: 100% !important;
-        overflow-x: auto !important; /* Activa scroll de celda solo si es estrictamente necesario */
+        overflow-x: auto !important;
         display: block !important;
         -webkit-overflow-scrolling: touch;
     }
-
-    /* 4. Forzar el redimensionamiento interno de la tabla */
     .premium-table {
         width: 100% !important;
         min-width: 100% !important;
-        table-layout: auto !important; /* Permite flexibilidad controlada sin romper márgenes */
+        table-layout: auto !important;
     }
-
-    /* 5. Reducción de espaciados internos (Padding) en celdas móviles */
     .premium-table th, 
     .premium-table td {
-        padding: 10px 8px !important; /* Reduce espacio lateral para ganar área visible */
-        font-size: 11px !important;    /* Ajuste de lectura óptima para pantallas de 390px */
-        white-space: normal !important; /* Permite que textos largos salten de línea en vez de estirar la tabla */
+        padding: 10px 8px !important;
+        font-size: 11px !important;
+        white-space: normal !important;
         word-break: break-word !important;
     }
-
-    /* Ajuste para los badges dentro de las tablas en móvil */
     .badge-tipo, .badge-gasto {
         padding: 2px 6px !important;
         font-size: 10px !important;
     }
 }
 
-/* ==========================================================================
-   REEMPLAZO DE TEXTO POR ICONO TRASH-CAN (FONT AWESOME COGNITIVO)
-   ========================================================================== */
-
-/* 1. Ocultar el texto "Eliminar" inyectado por el JS sin romper el botón */
-.history-log-pane .btn-action-delete {
-    font-size: 0 !important;          /* Hace invisible el texto "Eliminar" */
-    padding: 10px 14px !important;    /* Ajusta el contenedor a un formato cuadrado premium */
-    min-width: 40px;
-    height: 38px;
-    display: inline-flex;
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
+    z-index: 2000;
+    padding: 20px;
+    animation: fadeIn 0.3s ease-out;
 }
 
-/* 2. Inyectar el icono <i class="fa-solid fa-trash-can"></i> mediante pseudo-elemento */
-.history-log-pane .btn-action-delete::after {
-    font-family: "Font Awesome 6 Free" !important; /* Llama al motor de Font Awesome */
-    font-weight: 900 !important;                  /* Fuerza el estilo fa-solid */
-    content: "\f2ed" !important;                  /* Código Unicode oficial de fa-trash-can */
-    font-size: 14px !important;                   /* Tamaño del icono */
-    color: var(--brand-danger) !important;        /* Color rojo asignado en tus variables */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-container {
+    background-color: var(--bg-surface);
+    border-radius: var(--radius-lg);
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--text-muted);
     transition: var(--transition-smooth);
+    padding: 0 8px;
 }
 
-/* Hover effect para el icono del botón premium */
-.history-log-pane .btn-action-delete:hover::after {
-    color: white !important;                      /* El icono se vuelve blanco cuando te paras encima */
+.modal-close:hover {
+    color: var(--text-main);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+    margin-bottom: 24px;
+    background-color: var(--bg-surface-alt);
+    padding: 20px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.modal-filtros .flex-column {
+    flex: 1 1 200px;
+}
+
+.contenido-resumen {
+    margin-top: 16px;
+}
+
+.contenido-resumen .resumen-item {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 14px;
+}
+
+.contenido-resumen .resumen-total {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 2px solid var(--border-color);
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.contenido-resumen .resumen-total span {
+    display: inline-block;
+    min-width: 180px;
+}
+
+.resumen-detalle-ingreso {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 14px;
+}
+
+.resumen-detalle-ingreso .monto {
+    font-weight: 600;
+}
+
+.resumen-total-valor {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.color-ahorro-resumen {
+    color: #d69e2e;
+}
+
+@media (max-width: 600px) {
+    .modal-filtros {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .modal-filtros .flex-column {
+        flex: unset;
+    }
 }

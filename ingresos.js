@@ -6,6 +6,7 @@
     const btnRegistrarIngreso = document.getElementById("btnRegistrarIngreso");
     const totalMontoIngresos = document.getElementById("totalMontoIngresos");
     const balanceNetoMensual = document.getElementById("balanceNetoMensual");
+    const ahorroMesElement = document.getElementById("ahorroMes");
     const tablaIngresosCuerpo = document.getElementById("tablaIngresosCuerpo");
     const filtroMesAnioIngreso = document.getElementById("filtroMesAnioIngreso");
 
@@ -42,7 +43,6 @@
         const anioFiltroNum = parseInt(partesFiltro[0], 10);
         const mesFiltroNum = parseInt(partesFiltro[1], 10); 
 
-        // 1. Cargar catálogo de Fuentes de Ingreso en el selector secundario
         const fuenteSeleccionada = nombreIngreso.value;
         nombreIngreso.innerHTML = `<option value="">-- Seleccione Fuente --</option>`;
         
@@ -53,18 +53,15 @@
         nombreIngreso.value = fuenteSeleccionada;
         gestionarBotonesFuenteVisuales();
 
-        // 2. Pintar registros de Ingresos filtrados por el periodo de consulta
         tablaIngresosCuerpo.innerHTML = "";
         let sumatoriaIngresos = 0;
 
         const listaIngresos = data.ingresos || [];
         const ingresosFiltrados = listaIngresos.filter(ing => {
             let fechaAnalizar = ing.fecha; 
-            
             if (ing.mesAnio && ing.mesAnio.includes("-")) {
                 fechaAnalizar = ing.mesAnio;
             }
-
             if (!fechaAnalizar) return false;
 
             const partes = fechaAnalizar.split(/[-/]/);
@@ -96,7 +93,7 @@
                     <td><strong>${ing.idIngreso}</strong></td>
                     <td>${ing.fecha}</td>
                     <td>${ing.nombre}</td>
-                    <td class="text-right" style="font-weight:bold; color:#234e52;">$${valorMonto.toFixed(2)}</td>
+                    <td class="text-right" style="font-weight:bold; color:#234e52;">$ ${window.formatearMoneda(valorMonto)}</td>
                     <td class="text-center"></td>
                 `;
 
@@ -110,15 +107,13 @@
             });
         }
 
-        totalMontoIngresos.textContent = `$${sumatoriaIngresos.toFixed(2)}`;
+        totalMontoIngresos.textContent = `$ ${window.formatearMoneda(sumatoriaIngresos)}`;
 
-        // 3. BALANCE GLOBAL: Interconexión con la sumatoria paralela de gastos del mismo mes
         let sumatoriaGastos = 0;
         const listaGastos = data.registroGasto || [];
         
         listaGastos.forEach(g => {
             if (!g.fecha) return;
-
             const partesGasto = g.fecha.split(/[-/]/);
             if (partesGasto.length < 2) return;
 
@@ -139,8 +134,27 @@
         });
 
         const saldoNeto = sumatoriaIngresos - sumatoriaGastos;
-        balanceNetoMensual.textContent = `$${saldoNeto.toFixed(2)}`;
+        balanceNetoMensual.textContent = `$ ${window.formatearMoneda(saldoNeto)}`;
         balanceNetoMensual.style.color = (saldoNeto >= 0) ? "#2f855a" : "#e53e3e";
+
+        const ingresosTodos = data.ingresos || [];
+        const gastosAnuales = data.registroGastoAnual || [];
+
+        let ahorroAcumulado = 0;
+        for (let m = 1; m <= mesFiltroNum; m++) {
+            const mesStr = String(m).padStart(2, '0');
+            const inicioMes = `${anioFiltroNum}-${mesStr}-01`;
+            const finMes = `${anioFiltroNum}-${mesStr}-31`;
+
+            const ingMes = ingresosTodos.filter(ing => ing.fecha >= inicioMes && ing.fecha <= finMes);
+            const gastosMes = gastosAnuales.filter(g => g.fecha >= inicioMes && g.fecha <= finMes);
+            const totalIngMes = ingMes.reduce((sum, ing) => sum + (ing.monto || 0), 0);
+            const totalGastosMes = gastosMes.reduce((sum, g) => sum + (g.monto || 0), 0);
+            ahorroAcumulado += (totalIngMes - totalGastosMes);
+        }
+
+        ahorroMesElement.textContent = `$ ${window.formatearMoneda(ahorroAcumulado)}`;
+        ahorroMesElement.style.color = (ahorroAcumulado >= 0) ? "#d69e2e" : "#e53e3e";
     };
 
     function gestionarBotonesFuenteVisuales() {
