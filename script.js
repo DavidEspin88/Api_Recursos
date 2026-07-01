@@ -62,8 +62,8 @@ window.apiCache = {
                         <td><strong>${item.idGasto}</strong></td>
                         <td>${item.nombreGasto}</td>
                         <td class="text-center">
-                            <button class="btn-action-edit btn-editar-gasto">Editar</button>
-                            <button class="btn-action-delete btn-borrar-gasto">Borrar</button>
+                            <button class="btn-action-edit btn-editar-gasto"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn-action-delete btn-borrar-gasto"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     `;
                     fila.querySelector(".btn-editar-gasto").addEventListener("click", () => prepararEdicion(item.idGasto, item.nombreGasto));

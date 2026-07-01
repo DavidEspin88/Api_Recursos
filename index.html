@@ -3,238 +3,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Gastos - Unificado</title>
+    <title>Gestión de Gastos - Unificado Premium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container visual-hidden">
-        <h2>1. Estructura de Tipos de Gasto</h2>
-        <div class="form-group">
-            <input type="hidden" id="editIdGasto"> 
-            <input type="text" id="nombreGasto" placeholder="Ej: FIJO, VARIABLE, OCASIONAL..." required>
-            <button id="btnGuardar" class="btn-add">Guardar Tipo</button>
-        </div>
+    <div class="app-layout">
+        
+        <aside class="app-sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon">💎</div>
+                <div class="brand-text">
+                    <h1>Finanzas</h1>
+                    <span>Control Central</span>
+                </div>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="#modulo-ingresos" class="menu-item active">
+                    <span class="menu-icon"><span><i class="fa-solid fa-sack-dollar"></i></span></span>
+                    <span class="menu-label">Ingresos</span>
+                </a>
+                <a href="#modulo-gastos" class="menu-item">
+                    <span class="menu-icon"><span><i class="fa-regular fa-credit-card"></i></span></span>
+                    <span class="menu-label">Egresos</span>
+                </a>
+                <div class="theme-toggle-wrapper">
+                    <button id="theme-toggle-btn" class="theme-btn" onclick="document.body.classList.toggle('dark-mode')">🌓 Alternar Modo</button>
+                </div>
+            </nav>
+        </aside>
 
-        <h3>Tipos Registrados</h3>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="w-30">ID_GASTO</th>
-                        <th class="w-50">NOMBRE_GASTO</th>
-                        <th class="w-20 text-center">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="tablaGastos">
-                    <tr><td colspan="3" class="text-center">Cargando base de datos...</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="container visual-hidden">
-        <h2>2. Administrador Unificado de Categorías</h2>
-        <div class="card-panel">
-            <input type="hidden" id="editIdDetalleGasto"> 
+        <main class="app-main-content">
             
-            <div class="form-grid-2">
-                <div class="input-wrapper flex-1">
-                    <label class="input-label">Vincular a Tipo de Gasto:</label>
-                    <select id="selectTipoGastoDetalle" class="custom-select"></select>
+            <header class="app-header">
+                <div class="header-title-area">
+                    <h2>Panel de Control Financiero</h2>
+                    <p class="header-subtitle">Monitoreo de flujos, presupuestos y balances en tiempo real.</p>
                 </div>
-                <div class="input-wrapper flex-2">
-                    <label class="input-label">Nombre de la Categoría:</label>
-                    <input type="text" id="nombreGastoDetalle" placeholder="Ej: Arriendo, Internet, Gasolina..." required>
+                <div class="global-period-selector">
+                    <span class="filter-label"><span><i class="fa-thin fa-calendar-lines"></i></span> Periodo Contable:</span>
+                    <input type="month" id="filtroMesAnioIngreso" value="2026-01" class="input-month">
                 </div>
-            </div>
-            <button id="btnGuardarDetalle" class="btn-add btn-w-full">Crear Categoría</button>
-        </div>
+            </header>
 
-        <h3>Catálogo de Categorías</h3>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID_DETALLE</th>
-                        <th>TIPO GASTO</th>
-                        <th>CATEGORÍA (DETALLE)</th>
-                        <th>ESTADO</th>
-                        <th class="text-center">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="tablaDetalles">
-                    <tr><td colspan="5" class="text-center">Cargando catálogo...</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="container container-income">
-        <h2>💰 Gestión de Ingresos Mensuales</h2>
-        
-        <div class="filter-bar">
-            <label class="filter-label">📅 Periodo Contable :</label>
-            <input type="month" id="filtroMesAnioIngreso" value="2026-01" class="input-month">
-        </div>
-
-        <div class="card-panel white-bg">
-            <h4 class="card-title-income">Registrar Nuevo Ingreso</h4>
-            <div class="form-grid-auto">
-                <div class="flex-column">
-                    <label class="input-label label-dark">Fecha</label>
-                    <input type="date" id="fechaIngreso" class="custom-input-date">
-                </div>
+            <div class="dashboard-grid">
                 
-                <div class="flex-column pos-relative">
-                    <label class="input-label label-dark">Nombre / Fuente</label>
-                    <div class="flex-row gap-4 align-center">
-                        <select id="nombreIngreso" class="custom-select flex-1">
-                            <option value="">-- Seleccione Fuente --</option>
-                        </select>
-                        <button id="btnIngRapidoAdd" type="button" title="Crear Fuente" class="btn-icon-add">+</button>
-                        <button id="btnIngRapidoEdit" type="button" title="Editar Fuente" class="btn-icon-edit">✏️</button>
-                        <button id="btnIngRapidoDelete" type="button" title="Eliminar Fuente" class="btn-icon-delete">🗑️</button>
+                <section id="modulo-ingresos" class="container container-income dashboard-card full-width">
+                    <div class="card-header-premium">
+                        <div class="card-icon bg-income-light"><span><i class="fa-solid fa-sack-dollar"></i></span></div>
+                        <h3>Gestión de Ingresos Mensuales</h3>
                     </div>
                     
-                    <div id="subFormFuenteRapida" class="sub-form-popup">
-                        <input type="hidden" id="rapidoIdFuente">
-                        <input type="text" id="rapidoInputFuente" placeholder="Ej: David, Nómina, Rentas..." class="sub-form-input">
-                        <div class="flex-row gap-6 justify-end">
-                            <button id="btnFuenteCancelar" type="button" class="btn-sub-cancel">Cancelar</button>
-                            <button id="btnFuenteGuardar" type="button" class="btn-sub-save">Guardar</button>
+                    <div class="card-panel white-bg">
+                        <h4 class="card-title-income">Registrar Nuevo Ingreso</h4>
+                        <div class="form-grid-auto">
+                            <div class="flex-column">
+                                <label class="input-label label-dark">Fecha</label>
+                                <input type="date" id="fechaIngreso" class="custom-input-date">
+                            </div>
+                            
+                            <div class="flex-column pos-relative">
+                                <label class="input-label label-dark">Nombre / Fuente</label>
+                                <div class="flex-row gap-4 align-center">
+                                    <select id="nombreIngreso" class="custom-select flex-1">
+                                        <option value="">-- Seleccione Fuente --</option>
+                                    </select>
+                                    <button id="btnIngRapidoAdd" type="button" title="Crear Fuente" class="btn-icon-add">+</button>
+                                    <button id="btnIngRapidoEdit" type="button" title="Editar Fuente" class="btn-icon-edit" style="display: none;">✏️</button>
+                                    <button id="btnIngRapidoDelete" type="button" title="Eliminar Fuente" class="btn-icon-delete" style="display: none;">🗑️</button>
+                                </div>
+                                
+                                <div id="subFormFuenteRapida" class="sub-form-popup standard-modal-effect" style="display: none;">
+                                    <div class="modal-pop-header">⚡ Nueva Fuente</div>
+                                    <input type="hidden" id="rapidoIdFuente">
+                                    <input type="text" id="rapidoInputFuente" placeholder="Ej: David, Nómina, Rentas..." class="sub-form-input">
+                                    <div class="flex-row gap-6 justify-end">
+                                        <button id="btnFuenteCancelar" type="button" class="btn-sub-cancel">Cancelar</button>
+                                        <button id="btnFuenteGuardar" type="button" class="btn-sub-save">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex-column">
+                                <label class="input-label label-dark">Monto ($)</label>
+                                <input type="number" step="0.01" id="montoIngreso" placeholder="0.00" class="custom-input-number">
+                            </div>
+                        </div>
+                        <button id="btnRegistrarIngreso" class="btn-add btn-income-submit">Agregar Ingreso</button>
+                    </div>
+
+                    <div class="kpi-container form-grid-2 gap-15 m-t-15 m-b-15">
+                        <div class="summary-card kpi-card-income">
+                            <div class="kpi-icon"><span><i class="fa-solid fa-chart-line"></i></span></div>
+                            <div class="kpi-data">
+                                <span class="summary-title">Total Ingresos</span>
+                                <span id="totalMontoIngresos" class="summary-value color-income">$0.00</span>
+                            </div>
+                        </div>
+                        <div class="summary-card kpi-card-balance">
+                            <div class="kpi-icon"><span><i class="fa-solid fa-scale-balanced"></i></span></div>
+                            <div class="kpi-data">
+                                <span class="summary-title">Saldo del Mes</span>
+                                <span id="balanceNetoMensual" class="summary-value color-balance">$0.00</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="flex-column">
-                    <label class="input-label label-dark">Monto ($)</label>
-                    <input type="number" step="0.01" id="montoIngreso" placeholder="0.00" class="custom-input-number">
-                </div>
-            </div>
-            <button id="btnRegistrarIngreso" class="btn-add btn-income-submit">Agregar Ingreso</button>
-        </div>
-
-        <div class="form-grid-2 gap-15 m-t-15 m-b-15">
-            <div class="summary-card">
-                <span class="summary-title">Total Ingresos:</span>
-                <span id="totalMontoIngresos" class="summary-value color-income">$0.00</span>
-            </div>
-            <div class="summary-card">
-                <span class="summary-title">Saldo del Mes (Ingresos - Gastos):</span>
-                <span id="balanceNetoMensual" class="summary-value color-balance">$0.00</span>
-            </div>
-        </div>
-
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr class="th-income-bg">
-                        <th>ID_INGRESO</th>
-                        <th>FECHA</th>
-                        <th>NOMBRE / FUENTE</th>
-                        <th class="text-right">MONTO</th>
-                        <th class="text-center">ACCIÓN</th>
-                    </tr>
-                </thead>
-                <tbody id="tablaIngresosCuerpo">
-                    <tr><td colspan="5" class="text-center">Cargando ingresos...</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="container max-w-95 m-t-30">
-        <h2>3. Transacciones y Registro de Gastos</h2>
-        
-        <div class="card-panel-dashed">
-            <h4 class="card-title-standard">Nuevo Registro Transaccional</h4>
-            <div class="form-grid-auto gap-15 m-b-15">
-                <div class="flex-column">
-                    <label class="input-label label-dark">Fecha</label>
-                    <input type="date" id="fechaRegistro" class="custom-input-date">
-                </div>
-                <div class="flex-column">
-                    <label class="input-label label-dark">Tipo de Gasto</label>
-                    <select id="tipoGastoRegistro" class="custom-select">
-                        <option value="">-- Seleccione --</option>
-                    </select>
-                </div>
-                <div id="contenedorDetalleRegistro" class="flex-column pos-relative">
-                    <label class="input-label label-dark">Categoría (Detalle)</label>
-                    
-                    <input type="text" id="buscarDetalleTransaccion" placeholder=" Buscar categoría..." class="search-input-hidden">
-                    
-                    <div class="flex-row gap-6 align-center">
-                        <select id="detalleRegistro" disabled class="custom-select bg-disabled">
-                            <option value="">-- Seleccione Tipo primero --</option>
-                        </select>
-                        
-                        <button id="btnRapidoAdd" type="button" title="Crear nueva categoría" class="btn-action-quick btn-quick-green">+</button>
-                        <button id="btnRapidoEdit" type="button" title="Editar categoría seleccionada" class="btn-action-quick btn-quick-orange">✏️</button>
-                        <button id="btnRapidoDelete" type="button" title="Eliminar categoría seleccionada" class="btn-action-quick btn-quick-red">🗑️</button>
-                    </div>
-
-                    <div id="subFormCategoriaRapida" class="sub-form-popup-standard">
-                        <input type="hidden" id="rapidoIdDetalle">
-                        <input type="text" id="rapidoInputNombre" placeholder="Nombre de la nueva categoría..." class="sub-form-input-full">
-                        <div class="flex-row gap-6 justify-end">
-                            <button id="btnRapidoCancelar" type="button" class="btn-quick-cancel">Cancelar</button>
-                            <button id="btnRapidoGuardar" type="button" class="btn-quick-save">Guardar</button>
+                    <div class="table-card-wrapper">
+                        <div class="table-container">
+                            <table class="premium-table">
+                                <thead>
+                                    <tr class="th-income-bg">
+                                        <th>ID_INGRESO</th>
+                                        <th>FECHA</th>
+                                        <th>NOMBRE / FUENTE</th>
+                                        <th class="text-right">MONTO</th>
+                                        <th class="text-center">ACCIÓN</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaIngresosCuerpo">
+                                    <tr><td colspan="5" class="text-center table-loader">Cargando base de datos de ingresos...</td></tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </div>
-                <div class="flex-column">
-                    <label class="input-label label-dark">Monto ($)</label>
-                    <input type="number" step="0.01" id="montoRegistro" placeholder="0.00" class="custom-input-number">
-                </div>
-            </div>
-            <button id="btnRegistrarGasto" class="btn-add btn-expense-submit">Registrar Gasto</button>
-        </div>
+                </section>
 
-        <div class="form-grid-split">
-            <div>
-                <h3>Resumen Global</h3>
-                <div id="resumenGlobal" class="global-summary-box">
-                    $0.00
+                <section id="modulo-gastos" class="container max-w-95 m-t-30 dashboard-card full-width">
+                    <div class="card-header-premium">
+                        <div class="card-icon bg-expense-light"><span><i class="fa-regular fa-credit-card"></i></span></div>
+                        <h3>Transacciones y Registro de Gastos</h3>
+                    </div>
+                    
+                    <div class="card-panel-dashed">
+                        <h4 class="card-title-standard">Nuevo Registro Transaccional</h4>
+                        <div class="form-grid-auto gap-15 m-b-15">
+                            <div class="flex-column">
+                                <label class="input-label label-dark">Fecha</label>
+                                <input type="date" id="fechaRegistro" class="custom-input-date">
+                            </div>
+                            <div class="flex-column">
+                                <label class="input-label label-dark">Tipo de Gasto</label>
+                                <select id="tipoGastoRegistro" class="custom-select">
+                                    <option value="">-- Seleccione --</option>
+                                </select>
+                            </div>
+                            <div id="contenedorDetalleRegistro" class="flex-column pos-relative">
+                                <label class="input-label label-dark">Categoría (Detalle)</label>
+                                
+                                <input type="text" id="buscarDetalleTransaccion" placeholder="🔍 Buscar categoría..." class="search-input-hidden" style="display: none;">
+                                
+                                <div class="flex-row gap-6 align-center m-t-5">
+                                    <select id="detalleRegistro" disabled class="custom-select bg-disabled">
+                                        <option value="">-- Seleccione Tipo primero --</option>
+                                    </select>
+                                    
+                                    <button id="btnRapidoAdd" type="button" title="Crear nueva categoría" class="btn-action-quick btn-quick-green" style="display: none;"><span><i class="fa-solid fa-plus"></i></span></button>
+                                    <button id="btnRapidoEdit" type="button" title="Editar categoría seleccionada" class="btn-action-quick btn-quick-orange" style="display: none;"><span><i class="fa-solid fa-pen-ruler"></i></span></button>
+                                    <button id="btnRapidoDelete" type="button" title="Eliminar categoría seleccionada" class="btn-action-quick btn-quick-red" style="display: none;"><i class="fa-solid fa-trash-can"></i></button>
+                                </div>
+
+                                <div id="subFormCategoriaRapida" class="sub-form-popup-standard standard-modal-effect" style="display: none;">
+                                    <div class="modal-pop-header"><span><i class="fa-solid fa-circle-plus"></i></span> Nueva Categoría</div>
+                                    <input type="hidden" id="rapidoIdDetalle">
+                                    <input type="text" id="rapidoInputNombre" placeholder="Nombre de la nueva categoría..." class="sub-form-input-full">
+                                    <div class="flex-row gap-6 justify-end">
+                                        <button id="btnRapidoCancelar" type="button" class="btn-quick-cancel">Cancelar</button>
+                                        <button id="btnRapidoGuardar" type="button" class="btn-quick-save">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-column">
+                                <label class="input-label label-dark">Monto ($)</label>
+                                <input type="number" step="0.01" id="montoRegistro" placeholder="0.00" class="custom-input-number">
+                            </div>
+                        </div>
+                        <button id="btnRegistrarGasto" class="btn-add btn-expense-submit">Registrar Gasto</button>
+                    </div>
+
+                    <div class="form-grid-split entries-split-layout">
+                        <div class="summary-analytics-pane">
+                            <div class="analytics-header"><span><i class="fa-solid fa-chart-line"></i></span> Resumen de Egresos</div>
+                            <div id="resumenGlobal" class="global-summary-box">
+                                $0.00
+                            </div>
+
+                            <div class="analytics-header m-t-20"><span><i class="fa-regular fa-folder"></i></span> Distribución por Tipo</div>
+                            <div class="table-container compact-table-wrapper">
+                                <table class="premium-table compact">
+                                    <thead>
+                                        <tr>
+                                            <th>Tipo Gasto</th>
+                                            <th class="text-right">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="resumenPorTipo">
+                                        <tr><td colspan="2" class="text-center data-empty-msg">Sin registros computados.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="history-log-pane">
+                            <div class="analytics-header">Historial de Movimientos</div>
+                            <div class="table-container log-table-wrapper">
+                                <table class="premium-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Tipo</th>
+                                            <th>Detalle</th>
+                                            <th class="text-right">Monto</th>
+                                            <th class="text-center">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaRegistroGastos">
+                                        <tr><td colspan="5" class="text-center table-loader">Cargando registros...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div id="modulo-config" class="config-split-layout full-width visual-hidden">
+                    
+                    <div class="container dashboard-card">
+                        <div class="card-header-premium">
+                            <div class="card-icon bg-config-light">⚙️</div>
+                            <h3>1. Estructura de Tipos de Gasto</h3>
+                        </div>
+                        <div class="form-group-premium">
+                            <input type="hidden" id="editIdGasto"> 
+                            <input type="text" id="nombreGasto" placeholder="Ej: FIJO, VARIABLE, OCASIONAL..." required class="custom-input-text">
+                            <button id="btnGuardar" class="btn-add custom-action-btn">Guardar Tipo</button>
+                        </div>
+
+                        <h4 class="sub-panel-title">Tipos Configurados</h4>
+                        <div class="table-container structured-table">
+                            <table class="premium-table">
+                                <thead>
+                                    <tr>
+                                        <th class="w-30">ID_GASTO</th>
+                                        <th class="w-50">NOMBRE_GASTO</th>
+                                        <th class="w-20 text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaGastos">
+                                    <tr><td colspan="3" class="text-center table-loader">Sincronizando catálogo maestro...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="container dashboard-card">
+                        <div class="card-header-premium">
+                            <div class="card-icon bg-catalog-light">🗃️</div>
+                            <h3>2. Administrador Unificado de Categorías</h3>
+                        </div>
+                        <div class="card-panel structured-form-panel">
+                            <input type="hidden" id="editIdDetalleGasto"> 
+                            
+                            <div class="form-grid-2">
+                                <div class="input-wrapper flex-1">
+                                    <label class="input-label">Vincular a Tipo de Gasto:</label>
+                                    <select id="selectTipoGastoDetalle" class="custom-select"></select>
+                                </div>
+                                <div class="input-wrapper flex-2">
+                                    <label class="input-label">Nombre de la Categoría:</label>
+                                    <input type="text" id="nombreGastoDetalle" placeholder="Ej: Arriendo, Internet, Gasolina..." required class="custom-input-text">
+                                </div>
+                            </div>
+                            <button id="btnGuardarDetalle" class="btn-add btn-w-full m-t-10">Crear Categoría</button>
+                        </div>
+
+                        <h4 class="sub-panel-title">Catálogo Completo</h4>
+                        <div class="table-container structured-table">
+                            <table class="premium-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID_DETALLE</th>
+                                        <th>TIPO GASTO</th>
+                                        <th>CATEGORÍA</th>
+                                        <th>ESTADO</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaDetalles">
+                                    <tr><td colspan="5" class="text-center table-loader">Cargando catálogo...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                 </div>
 
-                <h3>Por Tipo de Gasto</h3>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tipo Gasto</th>
-                                <th class="text-right">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="resumenPorTipo">
-                            <tr><td colspan="2" class="text-center">Sin registros.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
             </div>
-
-            <div>
-                <h3>Historial de Movimientos</h3>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Tipo</th>
-                                <th>Detalle</th>
-                                <th class="text-right">Monto</th>
-                                <th class="text-center">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablaRegistroGastos">
-                            <tr><td colspan="5" class="text-center">Cargando registros...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
     <select id="filtroGlobalAnio" class="visual-hidden"><option value="2026">2026</option></select>
