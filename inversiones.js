@@ -33,14 +33,30 @@
 
     if (tipoInversionSelect) {
         tipoInversionSelect.addEventListener("change", () => { 
-            if (btnInvTipoEdit) btnInvTipoEdit.style.display = tipoInversionSelect.value ? "block" : "none"; 
-            if (btnInvTipoDelete) btnInvTipoDelete.style.display = tipoInversionSelect.value ? "block" : "none"; 
+            const container = tipoInversionSelect.closest('.flex-row');
+            if (tipoInversionSelect.value) {
+                if (btnInvTipoEdit) btnInvTipoEdit.style.display = "block";
+                if (btnInvTipoDelete) btnInvTipoDelete.style.display = "block";
+                container.classList.add('actions-inline-top');
+            } else {
+                if (btnInvTipoEdit) btnInvTipoEdit.style.display = "none";
+                if (btnInvTipoDelete) btnInvTipoDelete.style.display = "none";
+                container.classList.remove('actions-inline-top');
+            }
         });
     }
     if (entidadInversionSelect) {
         entidadInversionSelect.addEventListener("change", () => { 
-            if (btnInvEntidadEdit) btnInvEntidadEdit.style.display = entidadInversionSelect.value ? "block" : "none"; 
-            if (btnInvEntidadDelete) btnInvEntidadDelete.style.display = entidadInversionSelect.value ? "block" : "none"; 
+            const container = entidadInversionSelect.closest('.flex-row');
+            if (entidadInversionSelect.value) {
+                if (btnInvEntidadEdit) btnInvEntidadEdit.style.display = "block";
+                if (btnInvEntidadDelete) btnInvEntidadDelete.style.display = "block";
+                container.classList.add('actions-inline-top');
+            } else {
+                if (btnInvEntidadEdit) btnInvEntidadEdit.style.display = "none";
+                if (btnInvEntidadDelete) btnInvEntidadDelete.style.display = "none";
+                container.classList.remove('actions-inline-top');
+            }
         });
     }
 
@@ -65,6 +81,10 @@
     if (invFechaFin) invFechaFin.addEventListener("change", calcularInteresesAutomaticos);
 
     function abrirPopup(form, idInput, textInput, select, esEdicion) {
+        // Mover el formulario antes del contenedor padre del select
+        const container = select.closest('.flex-column');
+        container.insertBefore(form, container.firstChild);
+
         idInput.value = esEdicion ? select.value : "";
         textInput.value = esEdicion ? select.options[select.selectedIndex].text : "";
         form.style.display = "block";

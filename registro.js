@@ -157,12 +157,17 @@
     }
 
     function gestionarVisibilidadBotonesEdicion() {
+        const container = detalleRegistro.closest('.flex-row');
         if (detalleRegistro && detalleRegistro.value) {
             if (btnRapidoEdit) btnRapidoEdit.style.display = "block";
             if (btnRapidoDelete) btnRapidoDelete.style.display = "block";
+            // Aplicar estilo para botones en fila encima
+            container.classList.add('actions-inline-top');
         } else {
             if (btnRapidoEdit) btnRapidoEdit.style.display = "none";
             if (btnRapidoDelete) btnRapidoDelete.style.display = "none";
+            // Revertir
+            container.classList.remove('actions-inline-top');
         }
     }
 
@@ -173,6 +178,10 @@
     }
 
     function abrirSubFormGastos(esEdicion) {
+        // Mover el formulario antes del contenedor padre del select
+        const container = detalleRegistro.closest('.flex-column');
+        container.insertBefore(subFormCategoriaRapida, container.firstChild);
+
         if (esEdicion) {
             rapidoIdDetalle.value = detalleRegistro.value;
             rapidoInputNombre.value = detalleRegistro.options[detalleRegistro.selectedIndex].text;

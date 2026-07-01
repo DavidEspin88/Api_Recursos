@@ -632,11 +632,45 @@ body.dark-mode .global-summary-box {
     display: inline-block;
 }
 
-.table-loader,
-.data-empty-msg {
-    padding: 30px !important;
-    color: var(--text-muted) !important;
-    font-style: italic;
+/* Clase para posicionar botones en fila encima del input */
+.actions-top {
+    flex-direction: column-reverse !important;
+    gap: 8px !important;
+}
+
+/* Contenedor específico para alinear botones en fila encima */
+.actions-inline-top {
+    display: flex !important;
+    flex-direction: column-reverse !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    margin-bottom: 8px !important;
+}
+
+.actions-inline-top .crud-buttons-group {
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 6px !important;
+    animation: slideInCRUD 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.actions-inline-top .custom-select {
+    width: 100% !important;
+}
+
+@keyframes slideInCRUD {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pos-relative {
+    position: relative !important;
 }
 
 .sub-form-popup,
@@ -652,8 +686,8 @@ body.dark-mode .global-summary-box {
     padding: 20px !important;
     z-index: 200 !important;
     margin-top: 8px !important;
+    display: none;
 }
-
 .modal-pop-header {
     font-size: 12px;
     font-weight: 700;

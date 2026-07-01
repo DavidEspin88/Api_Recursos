@@ -8,7 +8,7 @@ window.apiCache = {
     registroGasto: [],
     matrizGastos: {},
     ingresos: [],
-    registroGastoAnual: [],
+    registroGastoAnual: null,
     _anioActual: null
 };
 
@@ -197,6 +197,7 @@ window.formatearMoneda = function(valor) {
 
                 if (window.apiCache._anioActual !== anioSelect) {
                     window.apiCache._anioActual = anioSelect;
+                    window.apiCache.registroGastoAnual = null;
                     cargarGastosAnuales(anioSelect);
                 }
             })

@@ -1,22 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Gastos e Inversiones - Premium</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <div class="app-layout">
-        
+
         <aside class="app-sidebar">
             <div class="sidebar-brand">
-                <div class="brand-icon">💎</div>
+                <div class="brand-icon"></div>
                 <div class="brand-text">
                     <h1>Finanzas</h1>
                     <span>Control Central</span>
@@ -36,37 +41,40 @@
                     <span class="menu-label">Inversiones</span>
                 </a>
                 <div class="theme-toggle-wrapper">
-                    <button id="theme-toggle-btn" class="theme-btn" onclick="document.body.classList.toggle('dark-mode')">Compartido 🌓 Alternar Modo</button>
+                    <button id="theme-toggle-btn" class="theme-btn"
+                        onclick="document.body.classList.toggle('dark-mode')">Compartido 🌓 Alternar Modo</button>
                 </div>
             </nav>
         </aside>
 
         <main class="app-main-content">
-            
+
             <header class="app-header">
                 <div class="header-title-area">
                     <h2>Panel de Control Financiero</h2>
-                    <p class="header-subtitle">Monitoreo de flujos, presupuestos, balances e inversiones en tiempo real.</p>
+                    <p class="header-subtitle">Monitoreo de flujos, presupuestos, balances e inversiones en tiempo real.
+                    </p>
                 </div>
                 <div class="header-actions">
                     <div class="global-period-selector">
                         <span class="filter-label"><i class="fa-solid fa-calendar-days"></i> Periodo Contable:</span>
                         <input type="month" id="filtroMesAnioIngreso" value="2026-01" class="input-month">
                     </div>
-                    <button id="btnResumenCuentas" class="btn-add" style="background-color: var(--brand-primary); color: white; border: none; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                    <button id="btnResumenCuentas" class="btn-add"
+                        style="background-color: var(--brand-primary); color: white; border: none; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
                         <i class="fa-solid fa-chart-pie"></i> Resumen de Cuentas
                     </button>
                 </div>
             </header>
 
             <div class="dashboard-grid">
-                
+
                 <section id="modulo-ingresos" class="container container-income dashboard-card full-width">
                     <div class="card-header-premium">
                         <div class="card-icon bg-income-light"><i class="fa-solid fa-sack-dollar"></i></div>
                         <h3>Gestión de Ingresos Mensuales</h3>
                     </div>
-                    
+
                     <div class="card-panel white-bg">
                         <h4 class="card-title-income">Registrar Nuevo Ingreso</h4>
                         <div class="form-grid-auto">
@@ -74,32 +82,42 @@
                                 <label class="input-label label-dark">Fecha</label>
                                 <input type="date" id="fechaIngreso" class="custom-input-date">
                             </div>
-                            
+
                             <div class="flex-column pos-relative">
                                 <label class="input-label label-dark">Nombre / Fuente</label>
                                 <div class="flex-row gap-4 align-center">
                                     <select id="nombreIngreso" class="custom-select flex-1">
                                         <option value="">-- Seleccione Fuente --</option>
                                     </select>
-                                    <button id="btnIngRapidoAdd" type="button" title="Crear Fuente" class="btn-icon-add">+</button>
-                                    <button id="btnIngRapidoEdit" type="button" title="Editar Fuente" class="btn-icon-edit" style="display: none;">✏️</button>
-                                    <button id="btnIngRapidoDelete" type="button" title="Eliminar Fuente" class="btn-icon-delete" style="display: none;">🗑️</button>
+                                    <div class="crud-buttons-group flex-row gap-4 align-center">
+                                        <button id="btnIngRapidoAdd" type="button" title="Crear Fuente"
+                                            class="btn-icon-add">+</button>
+                                        <button id="btnIngRapidoEdit" type="button" title="Editar Fuente"
+                                            class="btn-icon-edit" style="display: none;">✏️</button>
+                                        <button id="btnIngRapidoDelete" type="button" title="Eliminar Fuente"
+                                            class="btn-icon-delete" style="display: none;">🗑️</button>
+                                    </div>
                                 </div>
-                                
-                                <div id="subFormFuenteRapida" class="sub-form-popup standard-modal-effect" style="display: none;">
+
+                                <div id="subFormFuenteRapida" class="sub-form-popup standard-modal-effect"
+                                    style="display: none;">
                                     <div class="modal-pop-header">⚡ Nueva Fuente</div>
                                     <input type="hidden" id="rapidoIdFuente">
-                                    <input type="text" id="rapidoInputFuente" placeholder="Ej: David, Nómina, Rentas..." class="sub-form-input">
+                                    <input type="text" id="rapidoInputFuente" placeholder="Ej: David, Nómina, Rentas..."
+                                        class="sub-form-input">
                                     <div class="flex-row gap-6 justify-end">
-                                        <button id="btnFuenteCancelar" type="button" class="btn-sub-cancel">Cancelar</button>
-                                        <button id="btnFuenteGuardar" type="button" class="btn-sub-save">Guardar</button>
+                                        <button id="btnFuenteCancelar" type="button"
+                                            class="btn-sub-cancel">Cancelar</button>
+                                        <button id="btnFuenteGuardar" type="button"
+                                            class="btn-sub-save">Guardar</button>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="flex-column">
                                 <label class="input-label label-dark">Monto ($)</label>
-                                <input type="number" step="0.01" id="montoIngreso" placeholder="0.00" class="custom-input-number">
+                                <input type="number" step="0.01" id="montoIngreso" placeholder="0.00"
+                                    class="custom-input-number">
                             </div>
                         </div>
                         <button id="btnRegistrarIngreso" class="btn-add btn-income-submit">Agregar Ingreso</button>
@@ -142,7 +160,10 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tablaIngresosCuerpo">
-                                    <tr><td colspan="5" class="text-center table-loader">Cargando base de datos de ingresos...</td></tr>
+                                    <tr>
+                                        <td colspan="5" class="text-center table-loader">Cargando base de datos de
+                                            ingresos...</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -154,7 +175,7 @@
                         <div class="card-icon bg-expense-light"><i class="fa-regular fa-credit-card"></i></div>
                         <h3>Transacciones y Registro de Gastos</h3>
                     </div>
-                    
+
                     <div class="card-panel-dashed">
                         <h4 class="card-title-standard">Nuevo Registro Transaccional</h4>
                         <div class="form-grid-auto gap-15 m-b-15">
@@ -170,28 +191,44 @@
                             </div>
                             <div id="contenedorDetalleRegistro" class="flex-column pos-relative">
                                 <label class="input-label label-dark">Categoría (Detalle)</label>
-                                <input type="text" id="buscarDetalleTransaccion" placeholder="🔍 Buscar categoría..." class="search-input-hidden" style="display: none;">
+                                <input type="text" id="buscarDetalleTransaccion" placeholder="🔍 Buscar categoría..."
+                                    class="search-input-hidden" style="display: none;">
                                 <div class="flex-row gap-6 align-center m-t-5">
                                     <select id="detalleRegistro" disabled class="custom-select bg-disabled">
                                         <option value="">-- Seleccione Tipo primero --</option>
                                     </select>
-                                    <button id="btnRapidoAdd" type="button" title="Crear nueva categoría" class="btn-action-quick btn-quick-green" style="display: none;"><i class="fa-solid fa-plus"></i></button>
-                                    <button id="btnRapidoEdit" type="button" title="Editar categoría seleccionada" class="btn-action-quick btn-quick-orange" style="display: none;"><i class="fa-solid fa-pen-ruler"></i></button>
-                                    <button id="btnRapidoDelete" type="button" title="Eliminar categoría seleccionada" class="btn-action-quick btn-quick-red" style="display: none;"><i class="fa-solid fa-trash-can"></i></button>
+                                    <div class="crud-buttons-group flex-row gap-6 align-center">
+                                        <button id="btnRapidoAdd" type="button" title="Crear nueva categoría"
+                                            class="btn-action-quick btn-quick-green" style="display: none;"><i
+                                                class="fa-solid fa-plus"></i></button>
+                                        <button id="btnRapidoEdit" type="button" title="Editar categoría seleccionada"
+                                            class="btn-action-quick btn-quick-orange" style="display: none;"><i
+                                                class="fa-solid fa-pen-ruler"></i></button>
+                                        <button id="btnRapidoDelete" type="button"
+                                            title="Eliminar categoría seleccionada"
+                                            class="btn-action-quick btn-quick-red" style="display: none;"><i
+                                                class="fa-solid fa-trash-can"></i></button>
+                                    </div>
                                 </div>
-                                <div id="subFormCategoriaRapida" class="sub-form-popup-standard standard-modal-effect" style="display: none;">
-                                    <div class="modal-pop-header"><i class="fa-solid fa-circle-plus"></i> Nueva Categoría</div>
+                                <div id="subFormCategoriaRapida" class="sub-form-popup-standard standard-modal-effect"
+                                    style="display: none;">
+                                    <div class="modal-pop-header"><i class="fa-solid fa-circle-plus"></i> Nueva
+                                        Categoría</div>
                                     <input type="hidden" id="rapidoIdDetalle">
-                                    <input type="text" id="rapidoInputNombre" placeholder="Nombre de la nueva categoría..." class="sub-form-input-full">
+                                    <input type="text" id="rapidoInputNombre"
+                                        placeholder="Nombre de la nueva categoría..." class="sub-form-input-full">
                                     <div class="flex-row gap-6 justify-end">
-                                        <button id="btnRapidoCancelar" type="button" class="btn-quick-cancel">Cancelar</button>
-                                        <button id="btnRapidoGuardar" type="button" class="btn-quick-save">Guardar</button>
+                                        <button id="btnRapidoCancelar" type="button"
+                                            class="btn-quick-cancel">Cancelar</button>
+                                        <button id="btnRapidoGuardar" type="button"
+                                            class="btn-quick-save">Guardar</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="flex-column">
                                 <label class="input-label label-dark">Monto ($)</label>
-                                <input type="number" step="0.01" id="montoRegistro" placeholder="0.00" class="custom-input-number">
+                                <input type="number" step="0.01" id="montoRegistro" placeholder="0.00"
+                                    class="custom-input-number">
                             </div>
                         </div>
                         <button id="btnRegistrarGasto" class="btn-add btn-expense-submit">Registrar Gasto</button>
@@ -199,9 +236,11 @@
 
                     <div class="form-grid-split entries-split-layout">
                         <div class="summary-analytics-pane">
-                            <div class="analytics-header"><i class="fa-solid fa-chart-line"></i> Resumen de Egresos</div>
+                            <div class="analytics-header"><i class="fa-solid fa-chart-line"></i> Resumen de Egresos
+                            </div>
                             <div id="resumenGlobal" class="global-summary-box">$0.00</div>
-                            <div class="analytics-header m-t-20"><i class="fa-regular fa-folder"></i> Distribución por Tipo</div>
+                            <div class="analytics-header m-t-20"><i class="fa-regular fa-folder"></i> Distribución por
+                                Tipo</div>
                             <div class="table-container compact-table-wrapper">
                                 <table class="premium-table compact">
                                     <thead>
@@ -211,7 +250,10 @@
                                         </tr>
                                     </thead>
                                     <tbody id="resumenPorTipo">
-                                        <tr><td colspan="2" class="text-center data-empty-msg">Sin registros computados.</td></tr>
+                                        <tr>
+                                            <td colspan="2" class="text-center data-empty-msg">Sin registros computados.
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -230,7 +272,9 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tablaRegistroGastos">
-                                        <tr><td colspan="5" class="text-center table-loader">Cargando registros...</td></tr>
+                                        <tr>
+                                            <td colspan="5" class="text-center table-loader">Cargando registros...</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -247,24 +291,33 @@
                     <div class="card-panel white-bg">
                         <h4 class="card-title-standard">Nueva Colocación de Capital</h4>
                         <div class="form-grid-auto gap-15 m-b-15">
-                            
+
                             <div class="flex-column pos-relative">
                                 <label class="input-label label-dark">Tipo Inversión</label>
                                 <div class="flex-row gap-4 align-center">
                                     <select id="tipoInversionSelect" class="custom-select flex-1">
                                         <option value="">-- Seleccione Tipo --</option>
                                     </select>
-                                    <button id="btnInvTipoAdd" type="button" title="Agregar Tipo" class="btn-icon-add">+</button>
-                                    <button id="btnInvTipoEdit" type="button" title="Editar Tipo" class="btn-icon-edit" style="display: none;">✏️</button>
-                                    <button id="btnInvTipoDelete" type="button" title="Eliminar Tipo" class="btn-icon-delete" style="display: none;">🗑️</button>
+                                    <div class="crud-buttons-group flex-row gap-4 align-center">
+                                        <button id="btnInvTipoAdd" type="button" title="Agregar Tipo"
+                                            class="btn-icon-add">+</button>
+                                        <button id="btnInvTipoEdit" type="button" title="Editar Tipo"
+                                            class="btn-icon-edit" style="display: none;">✏️</button>
+                                        <button id="btnInvTipoDelete" type="button" title="Eliminar Tipo"
+                                            class="btn-icon-delete" style="display: none;">🗑️</button>
+                                    </div>
                                 </div>
-                                <div id="subFormInvTipo" class="sub-form-popup standard-modal-effect" style="display: none;">
+                                <div id="subFormInvTipo" class="sub-form-popup standard-modal-effect"
+                                    style="display: none;">
                                     <div class="modal-pop-header">⚡ Tipo de Inversión</div>
                                     <input type="hidden" id="rapidoIdInvTipo">
-                                    <input type="text" id="rapidoInputInvTipo" placeholder="Ej: Plazo Fijo, Acciones..." class="sub-form-input">
+                                    <input type="text" id="rapidoInputInvTipo" placeholder="Ej: Plazo Fijo, Acciones..."
+                                        class="sub-form-input">
                                     <div class="flex-row gap-6 justify-end">
-                                        <button id="btnInvTipoCancelar" type="button" class="btn-sub-cancel">Cancelar</button>
-                                        <button id="btnInvTipoGuardar" type="button" class="btn-sub-save">Guardar</button>
+                                        <button id="btnInvTipoCancelar" type="button"
+                                            class="btn-sub-cancel">Cancelar</button>
+                                        <button id="btnInvTipoGuardar" type="button"
+                                            class="btn-sub-save">Guardar</button>
                                     </div>
                                 </div>
                             </div>
@@ -275,40 +328,54 @@
                                     <select id="entidadInversionSelect" class="custom-select flex-1">
                                         <option value="">-- Seleccione Entidad --</option>
                                     </select>
-                                    <button id="btnInvEntidadAdd" type="button" title="Agregar Entidad" class="btn-icon-add">+</button>
-                                    <button id="btnInvEntidadEdit" type="button" title="Editar Entidad" class="btn-icon-edit" style="display: none;">✏️</button>
-                                    <button id="btnInvEntidadDelete" type="button" title="Eliminar Entidad" class="btn-icon-delete" style="display: none;">🗑️</button>
+                                    <div class="crud-buttons-group flex-row gap-4 align-center">
+                                        <button id="btnInvEntidadAdd" type="button" title="Agregar Entidad"
+                                            class="btn-icon-add">+</button>
+                                        <button id="btnInvEntidadEdit" type="button" title="Editar Entidad"
+                                            class="btn-icon-edit" style="display: none;">✏️</button>
+                                        <button id="btnInvEntidadDelete" type="button" title="Eliminar Entidad"
+                                            class="btn-icon-delete" style="display: none;">🗑️</button>
+                                    </div>
                                 </div>
-                                <div id="subFormInvEntidad" class="sub-form-popup standard-modal-effect" style="display: none;">
+                                <div id="subFormInvEntidad" class="sub-form-popup standard-modal-effect"
+                                    style="display: none;">
                                     <div class="modal-pop-header">🏦 Nombre de Entidad</div>
                                     <input type="hidden" id="rapidoIdInvEntidad">
-                                    <input type="text" id="rapidoInputInvEntidad" placeholder="Ej: Banco Pichincha, Coop..." class="sub-form-input">
+                                    <input type="text" id="rapidoInputInvEntidad"
+                                        placeholder="Ej: Banco Pichincha, Coop..." class="sub-form-input">
                                     <div class="flex-row gap-6 justify-end">
-                                        <button id="btnInvEntidadCancelar" type="button" class="btn-sub-cancel">Cancelar</button>
-                                        <button id="btnInvEntidadGuardar" type="button" class="btn-sub-save">Guardar</button>
+                                        <button id="btnInvEntidadCancelar" type="button"
+                                            class="btn-sub-cancel">Cancelar</button>
+                                        <button id="btnInvEntidadGuardar" type="button"
+                                            class="btn-sub-save">Guardar</button>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="flex-column">
                                 <label class="input-label label-dark">Capital ($)</label>
-                                <input type="number" step="0.01" id="invCapital" placeholder="0.00" class="custom-input-number">
+                                <input type="number" step="0.01" id="invCapital" placeholder="0.00"
+                                    class="custom-input-number">
                             </div>
                             <div class="flex-column">
                                 <label class="input-label label-dark">Interés Anual (%)</label>
-                                <input type="number" step="0.01" id="invInteresAnual" placeholder="0.00" class="custom-input-number">
+                                <input type="number" step="0.01" id="invInteresAnual" placeholder="0.00"
+                                    class="custom-input-number">
                             </div>
                             <div class="flex-column">
                                 <label class="input-label label-dark">Interés Compuesto ($)</label>
-                                <input type="number" step="0.01" id="invInteresCompuesto" placeholder="0.00" class="custom-input-number">
+                                <input type="number" step="0.01" id="invInteresCompuesto" placeholder="0.00"
+                                    class="custom-input-number">
                             </div>
                             <div class="flex-column">
                                 <label class="input-label label-dark">Total a Recibir ($)</label>
-                                <input type="number" step="0.01" id="invTotalRecibir" placeholder="0.00" class="custom-input-number">
+                                <input type="number" step="0.01" id="invTotalRecibir" placeholder="0.00"
+                                    class="custom-input-number">
                             </div>
                             <div class="flex-column">
                                 <label class="input-label label-dark">Interés Ganado ($)</label>
-                                <input type="number" step="0.01" id="invInteresGanado" placeholder="0.00" class="custom-input-number">
+                                <input type="number" step="0.01" id="invInteresGanado" placeholder="0.00"
+                                    class="custom-input-number">
                             </div>
                             <div class="flex-column">
                                 <label class="input-label label-dark">Fecha Inicio</label>
@@ -320,12 +387,14 @@
                             </div>
 
                         </div>
-                        <button id="btnRegistrarInversion" class="btn-add btn-w-full" style="background-color: var(--brand-primary) !important;">Registrar Inversión</button>
+                        <button id="btnRegistrarInversion" class="btn-add btn-w-full"
+                            style="background-color: var(--brand-primary) !important;">Registrar Inversión</button>
                     </div>
 
                     <div class="form-grid-split entries-split-layout m-t-20">
                         <div class="summary-analytics-pane">
-                            <div class="analytics-header"><i class="fa-solid fa-pie-chart"></i> Resumen por Tipo de Inversión</div>
+                            <div class="analytics-header"><i class="fa-solid fa-pie-chart"></i> Resumen por Tipo de
+                                Inversión</div>
                             <div class="table-container compact-table-wrapper" style="margin-top:15px;">
                                 <table class="premium-table compact">
                                     <thead>
@@ -337,14 +406,18 @@
                                         </tr>
                                     </thead>
                                     <tbody id="resumenInversionesCuerpo">
-                                        <tr><td colspan="4" class="text-center data-empty-msg">Sin datos computados.</td></tr>
+                                        <tr>
+                                            <td colspan="4" class="text-center data-empty-msg">Sin datos computados.
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
                         <div class="history-log-pane">
-                            <div class="analytics-header"><i class="fa-solid fa-list"></i> Historial de Inversiones</div>
+                            <div class="analytics-header"><i class="fa-solid fa-list"></i> Historial de Inversiones
+                            </div>
                             <div class="table-container log-table-wrapper" style="margin-top:15px;">
                                 <table class="premium-table">
                                     <thead>
@@ -358,7 +431,10 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tablaInversionesCuerpo">
-                                        <tr><td colspan="6" class="text-center table-loader">Cargando base de datos de inversiones...</td></tr>
+                                        <tr>
+                                            <td colspan="6" class="text-center table-loader">Cargando base de datos de
+                                                inversiones...</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -388,7 +464,9 @@
                         <label class="input-label">Fecha Final</label>
                         <input type="date" id="fechaFinResumen" class="custom-input-date">
                     </div>
-                    <button id="btnGenerarResumen" class="btn-add" style="background-color: var(--brand-primary); color: white; border: none; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; margin-top: 20px;">Generar Resumen</button>
+                    <button id="btnGenerarResumen" class="btn-add"
+                        style="background-color: var(--brand-primary); color: white; border: none; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; margin-top: 20px;">Generar
+                        Resumen</button>
                 </div>
                 <div id="contenidoResumen" class="contenido-resumen">
                     <p class="text-muted">Seleccione un rango de fechas y presione "Generar Resumen".</p>
@@ -403,4 +481,5 @@
     <script src="ingresos.js"></script>
     <script src="inversiones.js"></script>
 </body>
+
 </html>
