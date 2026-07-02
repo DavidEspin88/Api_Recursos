@@ -102,8 +102,8 @@ body {
 }
 
 .brand-icon {
-    width: 100px;
-    height: 100px;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -989,8 +989,8 @@ body.dark-mode .global-summary-box {
     }
 
     .header-brand-mobile .brand-icon {
-        width: 32px;
-        height: 32px;
+        width: 48px;
+        height: 48px;
         display: flex;
         align-items: center;
         justify-content: center;
