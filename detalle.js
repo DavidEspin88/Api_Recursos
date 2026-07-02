@@ -91,9 +91,10 @@
         }
 
         btnGuardar.disabled = true;
-        fetch(window.WEB_APP_URL, {
+        fetch(window.API_URL, {
             method: "POST",
             mode: "cors",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
         })
         .then(res => res.json())
@@ -114,8 +115,9 @@
     function eliminarCategoriaDetalle(id) {
         if (!confirm(`¿Desea eliminar de forma permanente la categoría ${id}?`)) return;
         
-        fetch(window.WEB_APP_URL, {
+        fetch(window.API_URL, {
             method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 target: "detalle_gasto",
                 action: "delete",

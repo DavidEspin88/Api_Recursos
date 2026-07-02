@@ -1,5 +1,8 @@
-// URL ÚNICA DE LA IMPLEMENTACIÓN DE GOOGLE APPS SCRIPT
-window.WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyLrwDbllvjReQ50MxXaL0m_2PgFqXELa4yxr1rbvzML6uWVOQHLELwLaNjnr9S6PJ0zA/exec";
+// Apunta a tu Cloud Function local en el Emulador de Firebase (sin costo)
+window.API_URL = "http://127.0.0.1:5001/misfinanzas-eed96/us-central1/procesarFinanzas";
+// Nota: una vez hagas el despliegue final a producción, solo tendrás que
+// reemplazar esta URL local por la URL real que te entregue Firebase.
+
 
 // Caché reactivo global accesible por los demás módulos del ecosistema
 window.apiCache = {
@@ -177,7 +180,7 @@ window.formatearMoneda = function(valor) {
         const indiceMes = parseInt(partes[1], 10) - 1;
         const mesSelect = mesesNombres[indiceMes] || "ENERO";
         
-        const urlConFiltros = `${window.WEB_APP_URL}?anio=${anioSelect}&mes=${mesSelect}`;
+        const urlConFiltros = `${window.API_URL}?anio=${anioSelect}&mes=${mesSelect}`;
 
         fetch(urlConFiltros)
             .then(res => res.json())
@@ -210,7 +213,7 @@ window.formatearMoneda = function(valor) {
     }
 
     function cargarGastosAnuales(anio, callback) {
-        const urlCompleta = `${window.WEB_APP_URL}?anio=${anio}&modo=completo`;
+        const urlCompleta = `${window.API_URL}?anio=${anio}&modo=completo`;
         fetch(urlCompleta)
             .then(res => res.json())
             .then(data => {
@@ -291,9 +294,10 @@ window.formatearMoneda = function(valor) {
         }
 
         btnGuardar.disabled = true;
-        fetch(window.WEB_APP_URL, { 
+        fetch(window.API_URL, { 
             method: "POST", 
             mode: "cors", 
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload) 
         })
         .then(res => res.json())
@@ -312,9 +316,10 @@ window.formatearMoneda = function(valor) {
     function eliminarRegistroTipo(id) {
         if (!confirm(`¿Está seguro de eliminar permanentemente el tipo de gasto ${id}?`)) return;
         
-        fetch(window.WEB_APP_URL, { 
+        fetch(window.API_URL, { 
             method: "POST", 
             mode: "cors", 
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ target: "gasto", action: "delete", id: id }) 
         })
         .then(res => res.json())

@@ -226,7 +226,7 @@
         }
 
         btnFuenteGuardar.disabled = true;
-        fetch(window.WEB_APP_URL, { method: "POST", mode: "cors", body: JSON.stringify(payload) })
+        fetch(window.API_URL, { method: "POST", mode: "cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
             .then(res => res.json())
             .then(result => {
                 if (result.status === "success") {
@@ -244,8 +244,9 @@
         if (!idFuente) return;
         if (!confirm("¿Desea eliminar esta fuente del catálogo?")) return;
 
-        fetch(window.WEB_APP_URL, {
+        fetch(window.API_URL, {
             method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ target: "detalle_gasto", action: "delete", id: idFuente })
         })
             .then(res => res.json())
@@ -277,7 +278,7 @@
         };
 
         btnRegistrarIngreso.disabled = true;
-        fetch(window.WEB_APP_URL, { method: "POST", mode: "cors", body: JSON.stringify(payload) })
+        fetch(window.API_URL, { method: "POST", mode: "cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
             .then(res => res.json())
             .then(result => {
                 if (result.status === "success") {
@@ -293,9 +294,10 @@
 
     function eliminarIngresoRegistroFila(id) {
         if (!confirm(`¿Desea eliminar el registro de ingreso ${id}?`)) return;
-        fetch(window.WEB_APP_URL, {
+        fetch(window.API_URL, {
             method: "POST",
             mode: "cors",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ target: "ingresos", action: "delete", id: id })
         })
             .then(res => res.json())

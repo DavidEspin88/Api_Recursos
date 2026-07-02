@@ -96,7 +96,7 @@
         if(!n) return;
         const payload = { target: "detalle_gasto", action: idInput.value ? "update" : "create", idGasto: idGastoCat, nombreGasto: n, idDetalleGasto: idInput.value || undefined };
         
-        fetch(window.WEB_APP_URL, { method: "POST", mode: "cors", body: JSON.stringify(payload) })
+        fetch(window.API_URL, { method: "POST", mode: "cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(result => {
             if (result.status === "success") {
@@ -114,7 +114,7 @@
 
     function eliminarCatalogoRapido(id) {
         if(!id || !confirm("¿Eliminar del catálogo de inversiones?")) return;
-        fetch(window.WEB_APP_URL, { method: "POST", mode: "cors", body: JSON.stringify({ target: "detalle_gasto", action: "delete", id: id }) })
+        fetch(window.API_URL, { method: "POST", mode: "cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ target: "detalle_gasto", action: "delete", id: id }) })
         .then(res => res.json())
         .then(result => {
             if (result.status === "success") {
@@ -267,7 +267,7 @@
             fechaFin: invFechaFin.value
         };
 
-        fetch(window.WEB_APP_URL, { method: "POST", mode: "cors", body: JSON.stringify(payload) })
+        fetch(window.API_URL, { method: "POST", mode: "cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(result => {
             if (result.status === "success") {
@@ -285,7 +285,7 @@
 
     window.eliminarInversionFila = function(id) {
         if(!confirm("¿Eliminar registro de inversión?")) return;
-        fetch(window.WEB_APP_URL, { method: "POST", mode: "cors", body: JSON.stringify({ target: "inversiones", action: "delete", id: id }) })
+        fetch(window.API_URL, { method: "POST", mode: "cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ target: "inversiones", action: "delete", id: id }) })
         .then(res => res.json())
         .then(result => {
             if (result.status === "success") {

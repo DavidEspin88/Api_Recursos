@@ -221,7 +221,7 @@
         }
 
         btnRapidoGuardar.disabled = true;
-        fetch(window.WEB_APP_URL, { method: "POST", mode: "cors", body: JSON.stringify(payload) })
+        fetch(window.API_URL, { method: "POST", mode: "cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(result => {
             if (result.status === "success") {
@@ -239,8 +239,9 @@
         if (!idDetalle) return;
         if (!confirm("¿Desea eliminar esta categoría permanentemente?")) return;
 
-        fetch(window.WEB_APP_URL, { 
+        fetch(window.API_URL, { 
             method: "POST", 
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ target: "detalle_gasto", action: "delete", id: idDetalle }) 
         })
         .then(res => res.json())
@@ -284,7 +285,7 @@
         };
 
         btnRegistrarGasto.disabled = true;
-        fetch(window.WEB_APP_URL, { method: "POST", mode: "cors", body: JSON.stringify(payload) })
+        fetch(window.API_URL, { method: "POST", mode: "cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(result => {
             if (result.status === "success") {
@@ -302,8 +303,9 @@
         if (!confirm("¿Desea dar de baja este movimiento financiero?")) return;
         const reg = window.apiCache.registroGasto.find(r => r.idRegistro === id);
         
-        fetch(window.WEB_APP_URL, { 
+        fetch(window.API_URL, { 
             method: "POST", 
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
                 target: "registro_gasto", 
                 action: "delete", 
