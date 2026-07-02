@@ -989,8 +989,8 @@ body.dark-mode .global-summary-box {
     }
 
     .header-brand-mobile .brand-icon {
-        width: 70px;
-        height: 70px;
+        width: 32px;
+        height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
